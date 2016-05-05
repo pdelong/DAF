@@ -16,12 +16,12 @@ VoidInitializer.prototype.initialize = function ( particleAttributes, toSpawn ) 
 // Basic Initializer
 ////////////////////////////////////////////////////////////////////////////////
 
-function Initializer ( opts ) {
+function FlockingInitializer ( opts ) {
     this._opts = opts;
     return this;
 };
 
-Initializer.prototype.initializePositions = function ( positions, toSpawn) {
+FlockingInitializer.prototype.initializePositions = function ( positions, toSpawn) {
     var base = this._opts.sphere;
     var base_pos = new THREE.Vector3( base.x, base.y, base.z );
     var r   = base.w;
@@ -29,9 +29,11 @@ Initializer.prototype.initializePositions = function ( positions, toSpawn) {
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
         // for now we just generate a random point in the unit cube; needs to be fixed
-        var pos = new THREE.Vector3( 1.0 - 2.0 * Math.random(),
-                                     1.0 - 2.0 * Math.random(),
-                                     1.0 - 2.0 * Math.random() );
+        var pos = new THREE.Vector3( 50.0 - 100.0 * Math.random(),
+                                     50.0 - 100.0 * Math.random(),
+                                     50.0 - 100.0 * Math.random() );
+
+        console.log("hello");
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, positions, pos );
@@ -40,7 +42,7 @@ Initializer.prototype.initializePositions = function ( positions, toSpawn) {
     positions.needUpdate = true;
 }
 
-Initializer.prototype.initializeVelocities = function ( velocities, positions, toSpawn ) {
+FlockingInitializer.prototype.initializeVelocities = function ( velocities, positions, toSpawn ) {
     var base_vel = this._opts.velocity;
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
@@ -49,7 +51,7 @@ Initializer.prototype.initializeVelocities = function ( velocities, positions, t
         var pos = getElement( idx, positions );
         var vel = pos.clone().multiplyScalar(5.0);
 
-
+        var vel = base_vel;
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, velocities, vel );
@@ -57,7 +59,7 @@ Initializer.prototype.initializeVelocities = function ( velocities, positions, t
     velocities.needUpdate = true;
 }
 
-Initializer.prototype.initializeColors = function ( colors, toSpawn ) {
+FlockingInitializer.prototype.initializeColors = function ( colors, toSpawn ) {
     var base_col = this._opts.color;
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
@@ -70,7 +72,7 @@ Initializer.prototype.initializeColors = function ( colors, toSpawn ) {
     colors.needUpdate = true;
 }
 
-Initializer.prototype.initializeSizes = function ( sizes, toSpawn ) {
+FlockingInitializer.prototype.initializeSizes = function ( sizes, toSpawn ) {
 
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
@@ -83,7 +85,7 @@ Initializer.prototype.initializeSizes = function ( sizes, toSpawn ) {
     sizes.needUpdate = true;
 }
 
-Initializer.prototype.initializeLifetimes = function ( lifetimes, toSpawn ) {
+FlockingInitializer.prototype.initializeLifetimes = function ( lifetimes, toSpawn ) {
 
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
@@ -96,9 +98,13 @@ Initializer.prototype.initializeLifetimes = function ( lifetimes, toSpawn ) {
     lifetimes.needUpdate = true;
 }
 
+var initialized = false;
+
 // how to make this funciton nicer to work with. This one is kinda ok, as for initialization
 // everything is independent
-Initializer.prototype.initialize = function ( particleAttributes, toSpawn ) {
+FlockingInitializer.prototype.initialize = function ( particleAttributes, toSpawn ) {
+    if (initialized)
+        return;
 
     // update required values
     this.initializePositions( particleAttributes.position, toSpawn );
@@ -110,4 +116,6 @@ Initializer.prototype.initialize = function ( particleAttributes, toSpawn ) {
     this.initializeLifetimes( particleAttributes.lifetime, toSpawn );
 
     this.initializeSizes( particleAttributes.size, toSpawn );
+
+    initialized = true;
 };

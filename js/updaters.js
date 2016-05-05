@@ -111,24 +111,24 @@ EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_
 
 };
 
-EulerUpdater.prototype.updateLifetimes = function ( particleAttributes, alive, delta_t) {
-    var positions     = particleAttributes.position;
-    var lifetimes     = particleAttributes.lifetime;
+// EulerUpdater.prototype.updateLifetimes = function ( particleAttributes, alive, delta_t) {
+//     var positions     = particleAttributes.position;
+//     var lifetimes     = particleAttributes.lifetime;
 
-    for ( var i = 0 ; i < alive.length ; ++i ) {
+//     for ( var i = 0 ; i < alive.length ; ++i ) {
 
-        if ( !alive[i] ) continue;
+//         if ( !alive[i] ) continue;
 
-        var lifetime = getElement( i, lifetimes );
+//         var lifetime = getElement( i, lifetimes );
 
-        if ( lifetime < 0 ) {
-            killParticle( i, particleAttributes, alive );
-        } else {
-            setElement( i, lifetimes, lifetime - delta_t );
-        }
-    }
+//         if ( lifetime < 0 ) {
+//             killParticle( i, particleAttributes, alive );
+//         } else {
+//             setElement( i, lifetimes, lifetime - delta_t );
+//         }
+//     }
 
-};
+// };
 
 EulerUpdater.prototype.collisions = function ( particleAttributes, alive, delta_t ) {
     if ( !this._opts.collidables ) {
@@ -145,7 +145,7 @@ EulerUpdater.prototype.collisions = function ( particleAttributes, alive, delta_
 
 EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) {
 
-    this.updateLifetimes( particleAttributes, alive, delta_t );
+    // this.updateLifetimes( particleAttributes, alive, delta_t );
     this.updateVelocities( particleAttributes, alive, delta_t );
     this.updatePositions( particleAttributes, alive, delta_t );
 

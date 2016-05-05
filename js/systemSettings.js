@@ -32,7 +32,7 @@ SystemSettings.flocking = {
     particleMaterial : SystemSettings.standardMaterial,
 
     // Initialization
-    initializerFunction : Initializer,
+    initializerFunction : FlockingInitializer,
     initializerSettings : {
         sphere: new THREE.Vector4 ( 0.0, 0.0, 0.0, 10.0),
         color:    new THREE.Vector4 ( 1.0, 1.0, 1.0, 1.0 ),
