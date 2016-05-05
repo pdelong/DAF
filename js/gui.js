@@ -9,7 +9,7 @@ Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
 Gui.blendTypes = [ "Normal", "Additive" ];
 
-Gui.particleSystems = [ "basic", "fountainBounce", "fountainSink", "attractor", "animated", "cloth", "mySystem" ];
+Gui.particleSystems = [ "flocking" ];
 
 Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 
@@ -20,7 +20,7 @@ Gui.values = {
     windowSize:  Gui.windowSizes[0],
     reset:       function () {},
     stopTime:    function () {},
-    guiToBatch : function() {},
+    // guiToBatch : function() {},
     blendTypes:  Gui.blendTypes[0],
     textures:    Gui.textures[0],
     systems:     Gui.particleSystems[0],
@@ -67,7 +67,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     // create top level controls
     var gui     = new dat.GUI( { width: 300 } );
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
-    var gToB    = gui.add( Gui.values, 'guiToBatch' );
+    // var gToB    = gui.add( Gui.values, 'guiToBatch' );
 
     // gui controls are added to this object below
     var gc = {};
@@ -139,16 +139,16 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
         }
     });
 
-    gToB.onChange( function() {
-        var url = 'batch.html?system=' + Gui.values.systems;
-        url += '&texture='+Gui.values.textures;
-        url += '&blending='+Gui.values.blendTypes;
-        url += '&depthTest='+Gui.values.depthTest;
-        url += '&transparent='+Gui.values.transparent;
-        url += '&sorting='+Gui.values.sorting;
-        url += '&size='+Gui.values.windowSize;
-        window.open( url );
-    } );
+    // gToB.onChange( function() {
+    //     var url = 'batch.html?system=' + Gui.values.systems;
+    //     url += '&texture='+Gui.values.textures;
+    //     url += '&blending='+Gui.values.blendTypes;
+    //     url += '&depthTest='+Gui.values.depthTest;
+    //     url += '&transparent='+Gui.values.transparent;
+    //     url += '&sorting='+Gui.values.sorting;
+    //     url += '&size='+Gui.values.windowSize;
+    //     window.open( url );
+    // } );
 };
 
 

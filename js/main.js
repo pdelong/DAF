@@ -59,7 +59,7 @@ Main.particleSystemChangeCallback = function ( InputSettings ) {
 
 // when HTML is finished loading, do this
 window.onload = function() {
-    Student.updateHTML();
+    // Student.updateHTML();
 
     // Setup renderer, scene and gui
     Gui.init( Main.controlsChangeCallback,
@@ -67,7 +67,7 @@ window.onload = function() {
     Scene.create();
 
     // Add particle system
-    Main.particleSystemChangeCallback( SystemSettings.basic );
+    Main.particleSystemChangeCallback( SystemSettings.flocking );
 
     Renderer.create( Scene, document.getElementById("canvas") );
 
