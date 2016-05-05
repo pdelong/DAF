@@ -77,7 +77,6 @@ Renderer.onWindowResize = function () {
     Renderer._renderer.setSize( Renderer._width, Renderer._height );
 };
 
-
 Renderer.update = function () {
 
     ParticleEngine.step();

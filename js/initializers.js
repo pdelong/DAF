@@ -25,6 +25,7 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
     var base = this._opts.sphere;
     var base_pos = new THREE.Vector3( base.x, base.y, base.z );
     var r   = base.w;
+    console.log(positions.length);
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
@@ -48,10 +49,10 @@ FlockingInitializer.prototype.initializeVelocities = function ( velocities, posi
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
         // just to get started, make the velocity the same as the initial position
-        var pos = getElement( idx, positions );
-        var vel = pos.clone().multiplyScalar(5.0);
-
-        var vel = base_vel;
+        var vx = 2.5 - Math.random() * 5.0;
+        var vy = 2.5 - Math.random() * 5.0;
+        var vz = 2.5 - Math.random() * 5.0;
+        vel = new THREE.Vector3(vx, vy, vz);
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, velocities, vel );

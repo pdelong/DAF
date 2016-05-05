@@ -52,7 +52,7 @@ SystemSettings.flocking = {
     },
 
     // Scene
-    maxParticles :  10000,
+    maxParticles :  100,
     particlesFreq : 1000,
     createScene : function () {},
 };

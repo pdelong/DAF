@@ -72,7 +72,6 @@ var ParticleEngine = ParticleEngine || new ( function() {
         for ( var i = 0 ; i < _self._emitters.length ; ++i ) {
             _self._emitters[i].update( elapsed );
         }
-
     };
 
     _self.stop = function () {
@@ -221,7 +220,8 @@ Emitter.prototype.update = function( delta_t ) {
     var toAdd = Math.floor( delta_t * this._particlesPerSecond );
 
     if ( toAdd > 0 ) {
-        this._initializer.initialize ( this._particleAttributes, this.getSpawnable( toAdd ), this._width, this._height );
+        // this._initializer.initialize ( this._particleAttributes, this.getSpawnable( toAdd ), this._width, this._height );
+        this._initializer.initialize ( this._particleAttributes, this.getSpawnable( 15 ), this._width, this._height );
     }
 
     // add check for existence
