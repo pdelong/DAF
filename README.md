@@ -1,2 +1,3 @@
 # DAF
-## By Peter DeLong, Dom Lam, and Henry Stolz
+
+by Peter DeLong, Dom Lam, and Henry Stolz
