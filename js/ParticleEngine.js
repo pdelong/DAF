@@ -23,6 +23,7 @@ var ParticleEngine = ParticleEngine || new ( function() {
     _self._prev_t     = undefined;
     _self._cur_t      = undefined;
     _self._isRunning  = false;
+    _self.spawnAmount = 1;
 
     _self.addEmitter = function ( emitter ) {
         _self._emitters.push( emitter );
@@ -100,6 +101,20 @@ var ParticleEngine = ParticleEngine || new ( function() {
 
     _self.getEmitters = function( ) {
         return _self._emitters;
+    }
+
+    _self.reinitialize = function() {
+        for (var i = 0; i < _self._emitters.length; ++i ) {
+            _self._emitters[i].addSpawn(_self.spawnAmount);
+        }
+
+        for ( var i = 0; i < _self._animations.length ; ++i ) {
+            _self._animations[i].addSpawn(_self.spawnAmount);
+        }
+    }
+
+    _self.setSpawnAmount = function(amt) {
+        _self.spawnAmount = amt;
     }
 
     return _self;
@@ -193,9 +208,7 @@ function Emitter ( opts ) {
 Emitter.prototype.restart = function() {
 
     for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
-
         this._initialized[i] = 0;
-
     }
 
     for ( var attributeKey in this._particleAttributes ) {
@@ -221,7 +234,8 @@ Emitter.prototype.update = function( delta_t ) {
 
     if ( toAdd > 0 ) {
         // this._initializer.initialize ( this._particleAttributes, this.getSpawnable( toAdd ), this._width, this._height );
-        this._initializer.initialize ( this._particleAttributes, this.getSpawnable( 15 ), this._width, this._height );
+        if (!this._initializer.initialized)
+            this._initializer.initialize ( this._particleAttributes, this.addSpawn( 15 ), this._width, this._height );
     }
 
     // add check for existence
@@ -292,8 +306,35 @@ Emitter.prototype.getSpawnable = function ( toAdd ) {
         if ( toSpawn.length >= toAdd ) break;
         this._initialized[i] = true;
         toSpawn.push(i);
-
     }
+
+    return toSpawn;
+};
+
+Emitter.prototype.addSpawn = function ( toAdd ) {
+    var toSpawn = [];
+    var counter = 0;
+    for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
+        if ( this._initialized[i] ) continue;
+        if ( counter >= toAdd ) break;
+        this._initialized[i] = true;
+        toSpawn.push(i);
+        counter++;
+    }
+
+    this._initializer.initialized = false;
+    this._initializer.initialize ( this._particleAttributes, toSpawn, this._width, this._height );
+
+    // // add check for existence
+    this._updater.update( this._particleAttributes, this._initialized, 0, this._width, this._height );
+
+    // // sorting -> Move it to camera update / loop update so that it is updated each time even if time is paused?
+    if ( this._sorting === true ) {
+        this.sortParticles();
+    }
+
+    // // for visibility culling
+    this._drawableParticles.geometry.computeBoundingSphere();
 
     return toSpawn;
 };

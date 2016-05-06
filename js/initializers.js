@@ -18,6 +18,7 @@ VoidInitializer.prototype.initialize = function ( particleAttributes, toSpawn ) 
 
 function FlockingInitializer ( opts ) {
     this._opts = opts;
+    this.initialized = false;
     return this;
 };
 
@@ -25,7 +26,6 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
     var base = this._opts.sphere;
     var base_pos = new THREE.Vector3( base.x, base.y, base.z );
     var r   = base.w;
-    console.log(positions.length);
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
@@ -33,8 +33,6 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
         var pos = new THREE.Vector3( 50.0 - 100.0 * Math.random(),
                                      50.0 - 100.0 * Math.random(),
                                      50.0 - 100.0 * Math.random() );
-
-        console.log("hello");
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, positions, pos );
@@ -99,12 +97,10 @@ FlockingInitializer.prototype.initializeLifetimes = function ( lifetimes, toSpaw
     lifetimes.needUpdate = true;
 }
 
-var initialized = false;
-
 // how to make this funciton nicer to work with. This one is kinda ok, as for initialization
 // everything is independent
 FlockingInitializer.prototype.initialize = function ( particleAttributes, toSpawn ) {
-    if (initialized)
+    if (this.initialized)
         return;
 
     // update required values
@@ -118,5 +114,5 @@ FlockingInitializer.prototype.initialize = function ( particleAttributes, toSpaw
 
     this.initializeSizes( particleAttributes.size, toSpawn );
 
-    initialized = true;
+    this.initialized = true;
 };

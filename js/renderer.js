@@ -117,6 +117,6 @@ window.addEventListener( 'keyup', function( event ) {
 window.addEventListener( 'keyup', function( event ) {
     // only respond to 'Spacebar' key
     if ( event.which == 32 ) {
-        ParticleEngine.pause();
+        ParticleEngine.reinitialize();
     }
 });

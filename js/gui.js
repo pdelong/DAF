@@ -11,6 +11,8 @@ Gui.blendTypes = [ "Normal", "Additive" ];
 
 Gui.particleSystems = [ "flocking" ];
 
+Gui.spawnAmount = [ 1, 5, 10, 20 ];
+
 Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 
 
@@ -20,6 +22,7 @@ Gui.values = {
     windowSize:  Gui.windowSizes[0],
     reset:       function () {},
     stopTime:    function () {},
+    spawnAmount: Gui.spawnAmount[0],
     // guiToBatch : function() {},
     blendTypes:  Gui.blendTypes[0],
     textures:    Gui.textures[0],
@@ -74,13 +77,14 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.stopTime  = gui.add( Gui.values, 'stopTime' ).name( "Pause" );
     gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
     gc.systems   = gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
+    gc.spawnAmount = gui.add( Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
 
-    var disp = gui.addFolder( "DISPLAY OPTIONS");
-    gc.blends    = disp.add( Gui.values, 'blendTypes', Gui.blendTypes ).name("Blending Types");
-    gc.textures  = disp.add( Gui.values, 'textures', Gui.textures ).name("Textures");
-    gc.depthTest = disp.add( Gui.values, 'depthTest' ).name("Depth Test");
-    gc.transp    = disp.add( Gui.values, 'transparent' ).name("Transparent");
-    gc.sort      = disp.add( Gui.values, 'sorting' ).name("Sorting");
+    // var disp = gui.addFolder( "DISPLAY OPTIONS");
+    // gc.blends    = disp.add( Gui.values, 'blendTypes', Gui.blendTypes ).name("Blending Types");
+    // gc.textures  = disp.add( Gui.values, 'textures', Gui.textures ).name("Textures");
+    // gc.depthTest = disp.add( Gui.values, 'depthTest' ).name("Depth Test");
+    // gc.transp    = disp.add( Gui.values, 'transparent' ).name("Transparent");
+    // gc.sort      = disp.add( Gui.values, 'sorting' ).name("Sorting");
 
     // REGISTER CALLBACKS FOR WHEN GUI CHANGES:
     size.onChange( Renderer.onWindowResize );
@@ -88,67 +92,60 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.stopTime.onChange( ParticleEngine.pause );
     gc.reset.onChange( ParticleEngine.restart );
 
-    gc.blends.onChange( function( value ) {
-        var emitters = ParticleEngine.getEmitters();
-        var blendType;
-        if ( value == "Normal" ) {
-            var blendType = THREE.NormalBlending;
-        } else if ( value == "Additive" ) {
-            var blendType = THREE.AdditiveBlending;
-        } else {
-            console.log( "Blend type unknown!" );
-            return;
-        }
-        for ( var i = 0 ; i < emitters.length ; i++ ) {
-            emitters[i]._material.blending = blendType ;
-        }
-    } );
+    // gc.blends.onChange( function( value ) {
+    //     var emitters = ParticleEngine.getEmitters();
+    //     var blendType;
+    //     if ( value == "Normal" ) {
+    //         var blendType = THREE.NormalBlending;
+    //     } else if ( value == "Additive" ) {
+    //         var blendType = THREE.AdditiveBlending;
+    //     } else {
+    //         console.log( "Blend type unknown!" );
+    //         return;
+    //     }
+    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
+    //         emitters[i]._material.blending = blendType ;
+    //     }
+    // } );
 
-    gc.textures.onChange( function( value ) {
-        var emitters = ParticleEngine.getEmitters();
-        for ( var i = 0 ; i < emitters.length ; i++ ) {
-            emitters[i]._material.uniforms.texture.value = new THREE.ImageUtils.loadTexture( 'images/' + value + '.png' );
-            emitters[i]._material.needsUpdate  = true;
-        }
-    } );
+    // gc.textures.onChange( function( value ) {
+    //     var emitters = ParticleEngine.getEmitters();
+    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
+    //         emitters[i]._material.uniforms.texture.value = new THREE.ImageUtils.loadTexture( 'images/' + value + '.png' );
+    //         emitters[i]._material.needsUpdate  = true;
+    //     }
+    // } );
 
     gc.systems.onChange( function(value) {
         var settings = SystemSettings[value];
         Main.particleSystemChangeCallback ( settings );
     } );
 
-    gc.depthTest.onChange( function( value ) {
-        var emitters = ParticleEngine.getEmitters();
-        for ( var i = 0 ; i < emitters.length ; i++ ) {
-            emitters[i]._material.depthTest = value;
-        }
-    });
+    gc.spawnAmount.onChange( function(value) {
+        ParticleEngine.setSpawnAmount(value);
+    } );
 
-    gc.transp.onChange( function( value ) {
-        var emitters = ParticleEngine.getEmitters();
-        for ( var i = 0 ; i < emitters.length ; i++ ) {
-            emitters[i]._material.transparent = value;
-            emitters[i]._material.needsUpdate  = true ;
-        }
-    });
+    // gc.depthTest.onChange( function( value ) {
+    //     var emitters = ParticleEngine.getEmitters();
+    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
+    //         emitters[i]._material.depthTest = value;
+    //     }
+    // });
 
-    gc.sort.onChange( function( value ) {
-        var emitters = ParticleEngine.getEmitters();
-        for ( var i = 0 ; i < emitters.length ; i++ ) {
-            emitters[i]._sorting = value;
-        }
-    });
+    // gc.transp.onChange( function( value ) {
+    //     var emitters = ParticleEngine.getEmitters();
+    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
+    //         emitters[i]._material.transparent = value;
+    //         emitters[i]._material.needsUpdate  = true ;
+    //     }
+    // });
 
-    // gToB.onChange( function() {
-    //     var url = 'batch.html?system=' + Gui.values.systems;
-    //     url += '&texture='+Gui.values.textures;
-    //     url += '&blending='+Gui.values.blendTypes;
-    //     url += '&depthTest='+Gui.values.depthTest;
-    //     url += '&transparent='+Gui.values.transparent;
-    //     url += '&sorting='+Gui.values.sorting;
-    //     url += '&size='+Gui.values.windowSize;
-    //     window.open( url );
-    // } );
+    // gc.sort.onChange( function( value ) {
+    //     var emitters = ParticleEngine.getEmitters();
+    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
+    //         emitters[i]._sorting = value;
+    //     }
+    // });
 };
 
 
