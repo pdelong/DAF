@@ -37,7 +37,7 @@ Renderer.create = function( scene, canvas ) {
     Renderer._renderer = new THREE.WebGLRenderer( { canvas:canvas, antialias: true, preserveDrawingBuffer: true } );
     Renderer._renderer.setPixelRatio( window.devicePixelRatio );
     Renderer._renderer.setSize( Renderer._width, Renderer._height );
-    Renderer._renderer.setClearColor( 0x444444 );//c5e1d7
+    Renderer._renderer.setClearColor( 0xe6ffff );//c5e1d7
 
     // Renderer._renderer.autoClear = false;
     window.addEventListener( "resize",    Renderer.onWindowResize, false );
@@ -115,8 +115,9 @@ window.addEventListener( 'keyup', function( event ) {
 });
 
 window.addEventListener( 'keyup', function( event ) {
-    // only respond to 'Spacebar' key
-    if ( event.which == 32 ) {
+    // only respond to 'a' key
+    console.log(event.which);
+    if ( event.which == 65 ) {
         ParticleEngine.reinitialize();
     }
 });

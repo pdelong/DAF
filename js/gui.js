@@ -20,7 +20,7 @@ Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 // (the variable Gui.defaults below then carries their default values, which we set later)
 Gui.values = {
     windowSize:  Gui.windowSizes[0],
-    reset:       function () {},
+    // reset:       function () {},
     stopTime:    function () {},
     spawnAmount: Gui.spawnAmount[0],
     // guiToBatch : function() {},
@@ -75,7 +75,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     // gui controls are added to this object below
     var gc = {};
     gc.stopTime  = gui.add( Gui.values, 'stopTime' ).name( "Pause" );
-    gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
+    // gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
     gc.systems   = gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
     gc.spawnAmount = gui.add( Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
 
@@ -90,7 +90,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     size.onChange( Renderer.onWindowResize );
 
     gc.stopTime.onChange( ParticleEngine.pause );
-    gc.reset.onChange( ParticleEngine.restart );
+    // gc.reset.onChange( ParticleEngine.restart );
 
     // gc.blends.onChange( function( value ) {
     //     var emitters = ParticleEngine.getEmitters();
