@@ -116,7 +116,6 @@ window.addEventListener( 'keyup', function( event ) {
 
 window.addEventListener( 'keyup', function( event ) {
     // only respond to 'a' key
-    console.log(event.which);
     if ( event.which == 65 ) {
         ParticleEngine.reinitialize();
     }

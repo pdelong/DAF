@@ -9,7 +9,6 @@
 
 var Collisions = Collisions || {};
 
-
 Collisions.Plane = function ( particleAttributes, alive, delta_t, plane,damping ) {
     var positions    = particleAttributes.position;
     var velocities   = particleAttributes.velocity;
@@ -26,6 +25,42 @@ Collisions.Plane = function ( particleAttributes, alive, delta_t, plane,damping 
         // ----------- STUDENT CODE END ------------
     }
 };
+
+Collisions.boundingBox = function ( particleAttributes, alive, delta_t, boundingBox ) {
+    var positions    = particleAttributes.position;
+    var velocities   = particleAttributes.velocity;
+
+    // var sphere_center = new THREE.Vector3(sphere.x, sphere.y, sphere.z);
+    // var sphere_radius = sphere.w;
+
+    for ( var i = 0 ; i < alive.length ; ++i ) {
+
+        if ( !alive[i] ) continue;
+        // ----------- STUDENT CODE BEGIN ------------
+        var pos = getElement( i, positions );
+        var vel = getElement( i, velocities );
+
+        var new_pos = pos.clone().add( vel.clone().multiplyScalar( delta_t ) );
+
+        var min_x = boundingBox[0];
+        var max_x = boundingBox[1];
+        var min_y = boundingBox[2];
+        var max_y = boundingBox[3];
+        var min_z = boundingBox[4];
+        var max_z = boundingBox[5];
+
+        if (new_pos.x < min_x) pos.x = max_x;
+        if (new_pos.x > max_x) pos.x = min_x;
+        if (new_pos.y < min_y) pos.y = max_y;
+        if (new_pos.y > max_y) pos.y = min_y;
+        if (new_pos.z < min_z) pos.z = max_z;
+        if (new_pos.z > max_z) pos.z = min_z;
+
+        setElement( i, positions, pos );
+        setElement( i, velocities, vel );
+        // ----------- STUDENT CODE END ------------
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Null updater - does nothing
@@ -139,6 +174,13 @@ EulerUpdater.prototype.collisions = function ( particleAttributes, alive, delta_
             var plane = this._opts.collidables.bouncePlanes[i].plane;
             var damping = this._opts.collidables.bouncePlanes[i].damping;
             Collisions.Plane( particleAttributes, alive, delta_t, plane, damping );
+        }
+    }
+
+    // axis box code
+    if ( this._opts.collidables.boundingBoxes ) {
+        for (var i = 0; i < this._opts.collidables.boundingBoxes.length ; ++i ) {
+            Collisions.boundingBox (particleAttributes, alive, delta_t, this._opts.collidables.boundingBoxes[i]);
         }
     }
 };

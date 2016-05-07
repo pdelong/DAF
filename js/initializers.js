@@ -47,10 +47,11 @@ FlockingInitializer.prototype.initializeVelocities = function ( velocities, posi
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
         // just to get started, make the velocity the same as the initial position
-        var vx = 2.5 - Math.random() * 5.0;
-        var vy = 2.5 - Math.random() * 5.0;
-        var vz = 2.5 - Math.random() * 5.0;
+        var vx = 1.0 - Math.random() * 2.0;
+        var vy = 1.0 - Math.random() * 2.0;
+        var vz = 1.0 - Math.random() * 2.0;
         vel = new THREE.Vector3(vx, vy, vz);
+        vel.multiplyScalar(20.0);
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, velocities, vel );

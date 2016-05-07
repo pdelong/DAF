@@ -1,4 +1,5 @@
 var SystemSettings = SystemSettings || {};
+var boundary_w = 50;
 
 SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
 
@@ -48,35 +49,34 @@ SystemSettings.flocking = {
             gravity :     new THREE.Vector3( 0, 0, 0),
             attractors : [],
         },
-        collidables: {},
+        collidables: {
+            boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],
+        },
     },
 
     // Scene
-    maxParticles :  100,
+    maxParticles :  500,
     particlesFreq : 1000,
     createScene : function () {
-        var w = 50;
-        drawLine(new THREE.Vector3(-w, -w, -w), new THREE.Vector3(-w, -w, w));
-        drawLine(new THREE.Vector3(-w, -w, -w), new THREE.Vector3(-w, w, -w));
-        drawLine(new THREE.Vector3(-w, -w, -w), new THREE.Vector3(w, -w, -w));
-        drawLine(new THREE.Vector3(w, w, -w), new THREE.Vector3(w, -w, -w));
-        drawLine(new THREE.Vector3(w, -w, w), new THREE.Vector3(w, -w, -w));
-        drawLine(new THREE.Vector3(w, -w, w), new THREE.Vector3(w, w, w));
-        drawLine(new THREE.Vector3(w, -w, w), new THREE.Vector3(-w, -w, w));
-        drawLine(new THREE.Vector3(-w, w, w), new THREE.Vector3(-w, -w, w));
-        drawLine(new THREE.Vector3(-w, w, w), new THREE.Vector3(-w, w, -w));
-        drawLine(new THREE.Vector3(-w, w, w), new THREE.Vector3(w, w, w));
-        drawLine(new THREE.Vector3(w, w, -w), new THREE.Vector3(w, w, w));
-        drawLine(new THREE.Vector3(w, w, -w), new THREE.Vector3(-w, w, -w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
 
-        drawLine(new THREE.Vector3(-w, w, w), new THREE.Vector3(w, w, -w));
-        drawLine(new THREE.Vector3(-w, -w, -w), new THREE.Vector3(w, -w, w));
-        drawLine(new THREE.Vector3(-w, -w, w), new THREE.Vector3(w, w, w));
-        drawLine(new THREE.Vector3(w, -w, w), new THREE.Vector3(w, w, -w));
-        drawLine(new THREE.Vector3(w, -w, -w), new THREE.Vector3(-w, w, -w));
-        drawLine(new THREE.Vector3(-w, -w, -w), new THREE.Vector3(-w, w, w));
-
-       
+        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));       
     },
 };
 
