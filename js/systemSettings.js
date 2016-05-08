@@ -1,5 +1,5 @@
 var SystemSettings = SystemSettings || {};
-var boundary_w = 50;
+var boundary_w = 100;
 
 SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
 
@@ -38,7 +38,7 @@ SystemSettings.flocking = {
         sphere: new THREE.Vector4 ( 0.0, 0.0, 0.0, 10.0),
         color:    new THREE.Vector4 ( 0.0, 0.0, 0.0, 1.0 ),
         velocity: new THREE.Vector3 ( 0.0, 0.0, 0.0),
-        lifetime: 7,
+        lifetime: 100,
         size:     6.0,
     },
 
@@ -50,12 +50,12 @@ SystemSettings.flocking = {
             attractors : [],
         },
         collidables: {
-            boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],
+            //boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],
         },
     },
 
     // Scene
-    maxParticles :  500,
+    maxParticles :  1000,
     particlesFreq : 1000,
     createScene : function () {
         drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));

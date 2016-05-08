@@ -235,7 +235,7 @@ Emitter.prototype.update = function( delta_t ) {
     if ( toAdd > 0 ) {
         // this._initializer.initialize ( this._particleAttributes, this.getSpawnable( toAdd ), this._width, this._height );
         if (!this._initializer.initialized)
-            this._initializer.initialize ( this._particleAttributes, this.addSpawn( 20 ), this._width, this._height );
+            this._initializer.initialize ( this._particleAttributes, this.addSpawn( 250 ), this._width, this._height );
     }
 
     // add check for existence

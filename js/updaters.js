@@ -56,6 +56,11 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         if (new_pos.z < min_z) pos.z = max_z;
         if (new_pos.z > max_z) pos.z = min_z;
 
+        // deal with rogue particles?
+        // if (vel.length() > 100) {
+        // 	killParticle(i, particleAttributes, alive);
+        // }
+
         setElement( i, positions, pos );
         setElement( i, velocities, vel );
         // ----------- STUDENT CODE END ------------
@@ -101,18 +106,50 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
 EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, delta_t ) {
     var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
-    var gravity = this._opts.externalForces.gravity;
-    var attractors = this._opts.externalForces.attractors;
 
-    for ( var i = 0 ; i < alive.length ; ++i ) {
-        if ( !alive[i] ) continue;
-        // ----------- STUDENT CODE BEGIN ------------
-        var p = getElement( i, positions );
-        var v = getElement( i, velocities );
-        // now update velocity based on forces...
+    // scale factors for each rule
+    var f_1 = 0.0005; 	// center of mass
+    var f_2 = 25;		// collision avoidance
+    var f_3 = 0.005;	// velocity matching
 
-        setElement( i, velocities, v );
-        // ----------- STUDENT CODE END ------------
+    var flock_size = 0;
+    var pos_sum = new THREE.Vector3();
+    var vel_sum = new THREE.Vector3();
+	for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        flock_size++;
+        pos_sum.add(getElement(i, positions));
+        vel_sum.add(getElement(i, velocities));
+    }
+
+    // boids rules: http://www.kfish.org/boids/pseudocode.html
+    for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        var p = getElement(i, positions).clone();
+        var v = getElement(i, velocities).clone();
+
+        // rule 3: velocity matching
+        // do first so v isn't yet altered by rules 1 and 2
+        var flock_vel = vel_sum.clone().sub(v).divideScalar(flock_size - 1);
+        flock_vel.sub(v).multiplyScalar(f_3);
+        v.add(flock_vel);
+
+        // rule 2: collision avoidance
+    	var shift = new THREE.Vector3();
+        for (var j = 0 ; j < alive.length; ++j) {
+        	var p_j = getElement(j, positions);
+        	if (!alive[j] && j != i && p.distanceTo(p_j) < f_2) {
+        		shift.sub((new THREE.Vector3()).subVectors(p_j, p));
+        	}
+        }
+        v.add(shift);
+
+        // rule 1: center of mass
+        var flock_pos = pos_sum.clone().sub(p).divideScalar(flock_size - 1);
+        flock_pos.sub(p).multiplyScalar(f_1);
+        v.add(flock_pos);
+
+        setElement(i, velocities, v);
     }
 
 };
