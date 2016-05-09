@@ -81,6 +81,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
     var predator = this._opts.externalForces.predator;
+    var foods = this._opts.externalForces.foods;
 
     // scale factors for each rule
     var f_1 = 0.0003 * Gui.factors[0]; 	// center of mass
@@ -133,10 +134,27 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
 
-        if (v.length() > 20)
+        if (v.length() > 50)
             v.sub(v.clone().multiplyScalar(.1*delta_t));
-        if (v.length() < 10)
+        if (v.length() < 20)
             v.add(v.clone().multiplyScalar(.1*delta_t*(10-v.length())));
+
+        var toRemove = [];
+        for (var f = 0; f < foods.length; f++) {
+            var dist_to_food = p.distanceTo(foods[f].position);
+            if (dist_to_food < foods[f].r + 2) {
+                Scene.removeObject(foods[f]);
+                foods.splice(f, 1);
+                f--;
+            }
+            else {
+                var acc = foods[f].position.clone().sub(p).divideScalar(dist_to_food);
+                acc.multiplyScalar(foods[f].magnitude);
+                v.add(acc.multiplyScalar(delta_t));
+            }
+        }
+        // remove foods
+
 
         setElement(i, velocities, v);
     }

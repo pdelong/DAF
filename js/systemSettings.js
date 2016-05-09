@@ -49,7 +49,7 @@ SystemSettings.flocking = {
         externalForces : {
             gravity :    new THREE.Vector3( 0, 0, 0 ),
             predator:    new THREE.Vector3( 0, 0, 0 ),
-            attractors : [],
+            foods : [],
         },
         collidables: {
             boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],

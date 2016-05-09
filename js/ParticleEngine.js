@@ -126,6 +126,16 @@ var ParticleEngine = ParticleEngine || new ( function() {
         }
     }
 
+    _self.addFood = function() {
+        for ( var i = 0 ; i < _self._emitters.length ; ++i ) {
+            _self._emitters[i].addFood();
+        }
+
+        for ( var i = 0; i < _self._animations.length ; ++i ) {
+            _self._emitters[i].addFood();
+        }
+    }
+
     _self.movePredator = function(delta_t) {
         var delta = 50;
 
@@ -393,6 +403,24 @@ Emitter.prototype.addSpawn = function ( toAdd ) {
 
 Emitter.prototype.addSpeed = function ( toScale ) {
     this._updater.speedup( this._particleAttributes, this._initialized, toScale );
+};
+
+Emitter.prototype.addFood = function () {
+    console.log(this._updater._opts.externalForces.foods);
+    var pos = new THREE.Vector3(1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random());
+    pos.multiplyScalar(boundary_w);
+    
+    var r = Math.random() * 2.0 + 3.0;
+    var geo = new THREE.SphereGeometry( r, 32, 32 );
+    var phong      = new THREE.MeshPhongMaterial( {color: 0xea0b29, emissive:0x442222, side: THREE.DoubleSide } );
+
+    var food_obj = new THREE.Mesh( geo, phong )
+    food_obj.position.set (pos.x, pos.y, pos.z);
+    food_obj.magnitude = (r * 20.0/3.0) + 20;
+    food_obj.r = r;
+    Scene.addObject( food_obj );
+
+    this._updater._opts.externalForces.foods.push(food_obj);
 };
 
 function redraw(pos, i) {

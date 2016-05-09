@@ -146,6 +146,9 @@ window.addEventListener( 'keyup', function( event ) {
         ParticleEngine.speedup();
         speedingUp += 0.3;
     }
+
+    if ( event.which == 68)
+        ParticleEngine.addFood();
 });
 
 // predator movement controls

@@ -1,3 +1,4 @@
+// Source: https://github.com/mrdoob/three.js/blob/master/examples/obj/Bird.js
 var Bird = function () {
 
     var scope = this;
