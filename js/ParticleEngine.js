@@ -272,6 +272,10 @@ Emitter.prototype.restart = function() {
     	this._initialized[i] = 0;
     	killParticle(i, this._particleAttributes, this._initialized);
     }
+    var foods = this._updater._opts.externalForces.foods;
+    for (var i = 0; i < foods.length; i++)
+        Scene.removeObject(foods[i]);
+    this._updater._opts.externalForces.foods = [];
     this._initializer.initialize(this._particleAttributes, this.addSpawn(250) );
 
 };
@@ -406,7 +410,6 @@ Emitter.prototype.addSpeed = function ( toScale ) {
 };
 
 Emitter.prototype.addFood = function () {
-    console.log(this._updater._opts.externalForces.foods);
     var pos = new THREE.Vector3(1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random(), 1.0 - 2.0 * Math.random());
     pos.multiplyScalar(boundary_w);
     
