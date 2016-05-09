@@ -162,9 +162,15 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 
         // predator avoidance
         var dist_to_predator = p.distanceTo(predator);
-        var acc = (new THREE.Vector3()).subVectors(p, predator).normalize().multiplyScalar(100);
-        if (dist_to_predator < 10 && old_objects.length != 0)
+        var acc = p.clone().sub(predator).divideScalar(Math.pow(dist_to_predator,1));
+        acc.multiplyScalar(10);
+        if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
+
+        if (v.length() > 20)
+            v.sub(v.clone().multiplyScalar(.1*delta_t));
+        if (v.length() < 10)
+            v.add(v.clone().multiplyScalar(.1*delta_t*(10-v.length())));
 
         setElement(i, velocities, v);
     }
@@ -259,6 +265,8 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
 
     this.updateColors( particleAttributes, alive, delta_t );
     this.updateSizes( particleAttributes, alive, delta_t );
+
+    ParticleEngine.movePredator(delta_t);
 
     // tell webGL these were updated
     particleAttributes.position.needsUpdate = true;

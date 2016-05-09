@@ -23,20 +23,17 @@ function FlockingInitializer ( opts ) {
 };
 
 FlockingInitializer.prototype.initializePositions = function ( positions, toSpawn) {
-    var base = this._opts.sphere;
-    var base_pos = new THREE.Vector3( base.x, base.y, base.z );
-    var r   = base.w;
+    var r = 5;
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
-        // for now we just generate a random point in the unit cube; needs to be fixed
-        var pos = new THREE.Vector3();
-        while (true) {
-            pos = new THREE.Vector3( 50.0 - 100.0 * Math.random(),
-                                     50.0 - 100.0 * Math.random(),
-                                     50.0 - 100.0 * Math.random());
-            if (pos.length() < 50) break;
-        }
+        var z = 2*r * Math.random() - r;
+        var phi = 2*Math.PI*Math.random();
+        d = Math.sqrt(r*r - z*z);
+
+        var pos = new THREE.Vector3(d * Math.cos(phi),
+                                    d * Math.sin(phi),
+                                    z);
         // ----------- STUDENT CODE END ------------
         setElement( idx, positions, pos );
 
@@ -47,26 +44,33 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
 FlockingInitializer.prototype.initializeVelocities = function ( velocities, positions, toSpawn ) {
 
     // generate general direction for flock
-    var fvx = 1.0 - Math.random() * 2.0;
-    var fvy = 1.0 - Math.random() * 2.0;
-    var fvz = 1.0 - Math.random() * 2.0;
-    var fvel = new THREE.Vector3(fvx, fvy, fvz);
-    fvel.multiplyScalar(2.5)
 
-        for ( var i = 0 ; i < toSpawn.length ; ++i ) {
-            var idx = toSpawn[i];
-            // ----------- STUDENT CODE BEGIN ------------
+    var z = 2 * Math.random() - 1;
+    var phi = 2*Math.PI*Math.random();
+    d = Math.sqrt(1 - z*z);
 
-            var vx = 1.0 - Math.random() * 2.0;
-            var vy = 1.0 - Math.random() * 2.0;
-            var vz = 1.0 - Math.random() * 2.0;
-            var vel = new THREE.Vector3(vx, vy, vz);
-            vel.add(fvel);
-            vel.multiplyScalar(40.0);
+    var fvel = new THREE.Vector3(d * Math.cos(phi),
+                                 d * Math.sin(phi),
+                                 z);
+    fvel.multiplyScalar(20);
+    for ( var i = 0 ; i < toSpawn.length ; ++i ) {
+        var idx = toSpawn[i];
+        // ----------- STUDENT CODE BEGIN ------------
+        // generate general direction for flock
+        var z = 2* Math.random() - 1;
+        var phi = 2*Math.PI*Math.random();
+        d = Math.sqrt(1 - z*z);
 
-            // ----------- STUDENT CODE END ------------
-            setElement( idx, velocities, vel );
-        }
+        var vel = new THREE.Vector3(d * Math.cos(phi),
+                                    d * Math.sin(phi),
+                                    z);
+
+        vel.add(fvel);
+        vel.multiplyScalar(1.0);
+
+        // ----------- STUDENT CODE END ------------
+        setElement( idx, velocities, vel );
+    }
     velocities.needUpdate = true;
 }
 

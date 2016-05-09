@@ -121,8 +121,30 @@ window.addEventListener( 'keyup', function( event ) {
     }
 });
 
+var Key_j = false;
+var Key_l = false;
+
+var Key_i = false;
+var Key_k = false;
+
+var Key_u = false;
+var Key_o = false;
+
 window.addEventListener( 'keyup', function( event ) {
-    // only respond to 's' key
+    // If a predator rey is released then stop moving in that direction
+    if (event.which == 73)
+        Key_i = false;
+    if (event.which == 75)
+        Key_k = false;
+    if (event.which == 74)
+        Key_j = false;
+    if (event.which == 76)
+        Key_l = false;
+    if (event.which == 85)
+        Key_u = false;
+    if (event.which == 79)
+        Key_o = false;
+
     if ( event.which == 83 ) {
         ParticleEngine.speedup();
     }
@@ -130,9 +152,19 @@ window.addEventListener( 'keyup', function( event ) {
 
 // predator moving controls
 window.addEventListener( 'keydown', function( event ) {
-    // only respond to 's' key
-    if ( event.which == 73 || event.which == 75 || event.which == 74 || event.which == 76 || event.which == 85 || event.which == 79) {
-        ParticleEngine.movePredator(event.which);
-    }
+
+    // As long as key is down we want to move the predator
+    if (event.which == 73)
+        Key_i = true;
+    if (event.which == 75)
+        Key_k = true;
+    if (event.which == 74)
+        Key_j = true;
+    if (event.which == 76)
+        Key_l = true;
+    if (event.which == 85)
+        Key_u = true;
+    if (event.which == 79)
+        Key_o = true;
 });
 

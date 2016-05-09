@@ -126,39 +126,39 @@ var ParticleEngine = ParticleEngine || new ( function() {
         }
     }
 
-    _self.movePredator = function(keycode) {
-        var delta = 5;
+    _self.movePredator = function(delta_t) {
+        var delta = 50;
         // move in positive x direction on key 'j'
-        if (keycode == 74)
+        if (Key_j)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.x += delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.x += delta*delta_t;
 
         // move in negative x direction on key 'l'
-        if (keycode == 76)
+        if (Key_l)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.x -= delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.x -= delta*delta_t;
 
         // move in positive y direction on key 'i'
-        if (keycode == 73)
+        if (Key_i)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.y += delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.y += delta*delta_t;
         // move in negative y direction on key 'k'
-        if (keycode == 75)
+        if (Key_k)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.y -= delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.y -= delta*delta_t;
 
         // move in positive y direction on key 'u'
-        if (keycode == 85)
+        if (Key_u)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.z += delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.z += delta*delta_t;
 
         // move in negative y direction on key 'o'
-        if (keycode == 79)
+        if (Key_o)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.z -= delta;
+                _self._emitters[i]._updater._opts.externalForces.predator.z -= delta*delta_t;
 
         // redraw predator
-        if (keycode == 74 || keycode == 76 || keycode == 73 || keycode == 75 || keycode == 85 || keycode == 79)
+        if (Key_i || Key_j || Key_k || Key_l || Key_u || Key_o)
             for (var i = 0; i < _self._emitters.length; ++i )
                 redraw(_self._emitters[i]._updater._opts.externalForces.predator, i);
 
