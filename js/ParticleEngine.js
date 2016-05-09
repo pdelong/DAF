@@ -23,7 +23,7 @@ var ParticleEngine = ParticleEngine || new ( function() {
     _self._prev_t     = undefined;
     _self._cur_t      = undefined;
     _self._isRunning  = false;
-    _self.spawnAmount = 1;
+    _self.spawnAmount = 25;
     _self.speedUpFactor = 1.25;
 
     _self.addEmitter = function ( emitter ) {

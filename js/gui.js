@@ -11,7 +11,7 @@ Gui.blendTypes = [ "Normal", "Additive" ];
 
 Gui.particleSystems = [ "flocking" ];
 
-Gui.spawnAmount = [ 1, 5, 10, 20 ];
+Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
 Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 
@@ -22,7 +22,7 @@ Gui.values = {
     windowSize:  Gui.windowSizes[0],
     // reset:       function () {},
     stopTime:    function () {},
-    spawnAmount: Gui.spawnAmount[0],
+    spawnAmount: Gui.spawnAmount[3],
     // guiToBatch : function() {},
     blendTypes:  Gui.blendTypes[0],
     textures:    Gui.textures[0],
