@@ -18,6 +18,7 @@ Main.particleSystemChangeCallback = function ( InputSettings ) {
 
     // If we specified animated model, then lets load it first
     if ( InputSettings.animatedModelName ) {
+        console.log('shit bro');
         var loader = new THREE.JSONLoader( true );
         loader.load( InputSettings.animatedModelName, InputSettings.animationLoadFunction );
     }

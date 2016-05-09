@@ -25,7 +25,7 @@ SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-// Flocking system
+// Flocking System
 ////////////////////////////////////////////////////////////////////////////////
 
 SystemSettings.flocking = {
@@ -48,7 +48,7 @@ SystemSettings.flocking = {
     updaterSettings : {
         externalForces : {
             gravity :    new THREE.Vector3( 0, 0, 0 ),
-            predator:    new THREE.Vector3( 0, 0, 0 ),
+            predator:    { p: new THREE.Vector3( 0, 0, 0 ), v: new THREE.Vector3( 0, 0, 0 ) },
             foods : [],
         },
         collidables: {
@@ -85,16 +85,12 @@ SystemSettings.flocking = {
         var plane2 = new THREE.Mesh( plane_geo, phong );
         plane2.position.set(0, -100, 0);
         plane2.rotation.x = 1.57;
-        console.log(plane2);
         Scene.addObject( plane2 );
 
         var plane3 = new THREE.Mesh( plane_geo, phong );
         plane3.position.set(-100, 0, 0);
         plane3.rotation.y = 1.57;
         Scene.addObject( plane3 );
-        
-        // plane.position.y = 0;
-
         
     },
 };

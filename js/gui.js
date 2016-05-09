@@ -7,7 +7,7 @@ Gui.sceneList = [];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.particleSystems = [ "flocking" ];
+Gui.particleSystems = [ "User", "Auto" ];
 
 Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
@@ -59,7 +59,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
 
     // gui controls are added to this object below
     var gc = {};
-    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Particle System");
+    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Flocking System");
     gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
     gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
     gc.help 	= gui.add( Gui.values, 'help').name("Help");
@@ -97,10 +97,15 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     //     }
     // } );
 
-    // gc.systems.onChange( function(value) {
-    //     var settings = SystemSettings[value];
-    //     Main.particleSystemChangeCallback ( settings );
-    // } );
+    gc.systems.onChange( function(value) {
+        // var settings = SystemSettings[value];
+        // Main.particleSystemChangeCallback ( settings ); // kek
+        if (value == 'User') { // prob horrible style but its k
+            Gui.values.systems = Gui.particleSystems[0];
+        } else if (value == 'Auto') {
+            Gui.values.systems = Gui.particleSystems[1];
+        }
+    } );
 
     gc.spawnAmount.onChange( function(value) {
         ParticleEngine.setSpawnAmount(value);

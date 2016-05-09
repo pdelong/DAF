@@ -74,6 +74,7 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
         p.add( v.clone().multiplyScalar( delta_t ) );
         setElement( i, positions, p );
     }
+
 };
 
 var counter = 0;
@@ -128,8 +129,8 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         v.add(flock_pos);
 
         // predator avoidance
-        var dist_to_predator = p.distanceTo(predator);
-        var acc = p.clone().sub(predator).divideScalar(dist_to_predator,1);
+        var dist_to_predator = p.distanceTo(predator.p);
+        var acc = p.clone().sub(predator.p).divideScalar(Math.pow(dist_to_predator,1));
         acc.multiplyScalar(10);
         if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
@@ -158,9 +159,22 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         }
         // remove foods
 
-
         setElement(i, velocities, v);
     }
+
+    // predator movement
+    // var predator_v = 50.0;
+    // var current_v  = predator.v;
+    // if (Gui.values.systems == Gui.particleSystems[1]) {
+    //     var z = 2 * Math.random() - 1;
+    //     var phi = 2*Math.PI*Math.random();
+    //     var d = Math.sqrt(1 - z*z);
+
+    //     this._opts.externalForces.predator.v = new THREE.Vector3(d * Math.cos(phi),
+    //                              d * Math.sin(phi),
+    //                              z);
+    //     predator.v.multiplyScalar(predator_v);
+    // }
 
 };
 
@@ -273,7 +287,9 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
     this.updateColors( particleAttributes, alive, delta_t );
     this.updateSizes( particleAttributes, alive, delta_t );
 
-    ParticleEngine.movePredator(delta_t);
+    if (Gui.values.systems == Gui.particleSystems[0]) {
+        ParticleEngine.movePredator(delta_t);
+    }
 
     // tell webGL these were updated
     particleAttributes.position.needsUpdate = true;
