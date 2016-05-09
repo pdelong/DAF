@@ -419,7 +419,7 @@ Emitter.prototype.addFood = function () {
 
     var food_obj = new THREE.Mesh( geo, phong )
     food_obj.position.set (pos.x, pos.y, pos.z);
-    food_obj.magnitude = (r * 20.0/3.0) + 20;
+    food_obj.magnitude = (r * 4.0) + 10;
     food_obj.r = r;
     Scene.addObject( food_obj );
 

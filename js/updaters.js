@@ -33,7 +33,7 @@ Boundaries.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         // attractor box code
         if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
                 new_pos.y > max_y || new_pos.z < min_z || new_pos.z > max_z) {
-            vel.add(center.sub(new_pos).multiplyScalar(0.001));
+            vel.add(center.sub(new_pos).multiplyScalar(0.002));
         }
 
         setElement( i, positions, pos );
@@ -129,7 +129,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 
         // predator avoidance
         var dist_to_predator = p.distanceTo(predator);
-        var acc = p.clone().sub(predator).divideScalar(Math.pow(dist_to_predator,1));
+        var acc = p.clone().sub(predator).divideScalar(dist_to_predator,1);
         acc.multiplyScalar(10);
         if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
@@ -139,6 +139,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         if (v.length() < 20)
             v.add(v.clone().multiplyScalar(.1*delta_t*(10-v.length())));
 
+        // food attraction
         var toRemove = [];
         for (var f = 0; f < foods.length; f++) {
             var dist_to_food = p.distanceTo(foods[f].position);
@@ -148,7 +149,9 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
                 f--;
             }
             else {
-                var acc = foods[f].position.clone().sub(p).divideScalar(dist_to_food);
+                var acc = foods[f].position.clone().sub(p);
+                if (dist_to_food >= 1.0)
+                    acc.divideScalar(dist_to_food);
                 acc.multiplyScalar(foods[f].magnitude);
                 v.add(acc.multiplyScalar(delta_t));
             }
