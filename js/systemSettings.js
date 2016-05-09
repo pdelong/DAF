@@ -1,10 +1,10 @@
 var SystemSettings = SystemSettings || {};
-var boundary_w = 150;
+var boundary_w = 100;
 
 SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
 
     uniforms: {
-        texture:  { type: 't',  value: new THREE.ImageUtils.loadTexture( 'images/blank.png' ) },
+        texture:  { type: 't',  value: new THREE.ImageUtils.loadTexture( 'images/sphere.png' ) },
     },
 
     attributes: {
@@ -39,7 +39,7 @@ SystemSettings.flocking = {
         color:    new THREE.Vector4 ( 0.0, 0.0, 0.0, 1.0 ),
         velocity: new THREE.Vector3 ( 0.0, 0.0, 0.0),
         lifetime: 100,
-        size:     6.0,
+        size:     10.0,
     },
 
     // Update

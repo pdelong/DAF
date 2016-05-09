@@ -51,15 +51,6 @@ Main.particleSystemChangeCallback = function ( InputSettings ) {
     // Add the particle system
     for ( var i = 0 ; i < ParticleEngine._emitters.length ; ++i ) {
         Scene.addObject( ParticleEngine.getDrawableParticles( i ) );
-        // birds = ParticleEngine.getBirds(i);
-        // console.log(birds["initialized"]);
-        // console.log(birds["initialized"][3]);
-        // for (var b = 0; b < birds["initialized"].length; b++) {
-            // if(birds["initialized"][i] == true)
-                // console.log(birds["initialized"][i]);
-                // console.log(1);
-            // Scene.addObject( birds[b] );
-        // }
     }
 
     // Create the scene

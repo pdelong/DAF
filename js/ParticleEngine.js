@@ -102,10 +102,6 @@ var ParticleEngine = ParticleEngine || new ( function() {
         return _self._emitters[emitter_idx].getDrawableParticles();
     }
 
-    _self.getBirds = function ( emitter_idx ) {
-        return _self._emitters[emitter_idx].getBirds();
-    }
-
     _self.getEmitters = function( ) {
         return _self._emitters;
     }
@@ -133,12 +129,12 @@ var ParticleEngine = ParticleEngine || new ( function() {
     _self.movePredator = function(delta_t) {
         var delta = 50;
         // move in positive x direction on key 'j'
-        if (Key_j)
+        if (Key_l)
             for (var i = 0; i < _self._emitters.length; ++i )
                 _self._emitters[i]._updater._opts.externalForces.predator.x += delta*delta_t;
 
         // move in negative x direction on key 'l'
-        if (Key_l)
+        if (Key_j)
             for (var i = 0; i < _self._emitters.length; ++i )
                 _self._emitters[i]._updater._opts.externalForces.predator.x -= delta*delta_t;
 
@@ -257,14 +253,6 @@ function Emitter ( opts ) {
     // Create the drawable particles - this is the object that three.js will use to draw stuff onto screen
     this._drawableParticles = new THREE.PointCloud( this._particles, this._material );
 
-    this._birds = {particles: this._particles, material: this._material, initialized: this._initialized};
-    // for (var i = 0; i < this._initialized.length; i++) {
-    //     bird = this._birds[ i ] = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: getElement(i, this._particleAttributes.color), side: THREE.DoubleSide } ) );
-    //     bird.phase = Math.floor( Math.random() * 62.83 );
-    //     var pos = getElement(0, this._particleAttributes.position);
-    //     bird.position.set(pos.x, pos.y, pos.z);
-    // }
-
     return this;
 };
 
@@ -320,10 +308,6 @@ Emitter.prototype.enableSorting = function( val ) {
 
 Emitter.prototype.getDrawableParticles = function () {
     return this._drawableParticles;
-};
-
-Emitter.prototype.getBirds = function () {
-    return this._birds;
 };
 
 Emitter.prototype.sortParticles = function () {
@@ -414,10 +398,22 @@ function redraw(pos, i) {
     if (old_objects[i] !== undefined)
         Scene.removeObject( old_objects[i] );
 
-    var sphere_geo = new THREE.SphereGeometry( 5.0 );
-    var phong      = new THREE.MeshPhongMaterial( {color: 0x4E2E28, emissive:0x442222, side: THREE.DoubleSide } );
-    var new_obj = new THREE.Mesh( sphere_geo, phong )
-        new_obj.position.set (pos.x, pos.y, pos.z);
-    old_objects[i] = new_obj;
-    Scene.addObject( new_obj );
+    var bird = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: 0x996515, side: THREE.DoubleSide } ) );
+    bird.position.set(pos.x, pos.y, pos.z);
+    old_objects[i] = bird;
+    
+    var vel = new THREE.Vector3(Math.random(), Math.random(), Math.random());
+    // move in positive x direction on key 'j'
+    var delta = 10;
+    if (Key_l) vel.x += delta;
+    if (Key_j) vel.x -= delta;
+    if (Key_i) vel.y += delta;
+    if (Key_k) vel.y -= delta;
+    if (Key_u) vel.z += delta;
+    if (Key_o) vel.z -= delta;
+    
+    bird.rotation.y = Math.atan2( - vel.z, vel.x );
+    bird.rotation.z = Math.asin( vel.y / vel.length() );
+    bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
+    Scene.addObject( bird );
 }
