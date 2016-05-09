@@ -423,6 +423,17 @@ Emitter.prototype.addFood = function () {
     food_obj.r = r;
     Scene.addObject( food_obj );
 
+    var foods = this._updater._opts.externalForces.foods;
+    setTimeout(function() {
+        for (var i = 0; i < foods.length; i++) {
+            if (food_obj === foods[i]) {
+                Scene.removeObject(food_obj);
+                foods.splice(i, 1);
+                break;
+            }
+        }
+    }, 15000);
+
     this._updater._opts.externalForces.foods.push(food_obj);
 };
 
