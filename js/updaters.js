@@ -49,17 +49,23 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         var min_z = boundingBox[4];
         var max_z = boundingBox[5];
 
-        if (new_pos.x < min_x) pos.x = max_x;
-        if (new_pos.x > max_x) pos.x = min_x;
-        if (new_pos.y < min_y) pos.y = max_y;
-        if (new_pos.y > max_y) pos.y = min_y;
-        if (new_pos.z < min_z) pos.z = max_z;
-        if (new_pos.z > max_z) pos.z = min_z;
+        var center = new THREE.Vector3((min_x + max_x) / 2, 
+        							   (min_y + max_y) / 2, 
+        							   (min_z + max_z) / 2);
 
-        // deal with rogue particles?
-        // if (vel.length() > 100) {
-        // 	killParticle(i, particleAttributes, alive);
-        // }
+        // constraint code
+        // if (new_pos.x < min_x) pos.x = max_x;
+        // if (new_pos.x > max_x) pos.x = min_x;
+        // if (new_pos.y < min_y) pos.y = max_y;
+        // if (new_pos.y > max_y) pos.y = min_y;
+        // if (new_pos.z < min_z) pos.z = max_z;
+        // if (new_pos.z > max_z) pos.z = min_z;
+
+        // attractor code
+       	if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
+       		new_pos.y > max_y || new_pos.z < min_z || new_pos.z > max_z) {
+       		vel.add(center.sub(new_pos).multiplyScalar(0.0025));
+       	}
 
         setElement( i, positions, pos );
         setElement( i, velocities, vel );
@@ -108,8 +114,9 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     var velocities = particleAttributes.velocity;
 
     // scale factors for each rule
-    var f_1 = 0.0005; 	// center of mass
-    var f_2 = 25;		// collision avoidance
+    var f_1 = 0.00025; 	// center of mass
+    var f_2a = 15; 		// collision avoidance: distance threshold
+    var f_2b = 0.001;	// collision avoidance: shift scale factor
     var f_3 = 0.005;	// velocity matching
 
     var flock_size = 0;
@@ -138,10 +145,11 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     	var shift = new THREE.Vector3();
         for (var j = 0 ; j < alive.length; ++j) {
         	var p_j = getElement(j, positions);
-        	if (!alive[j] && j != i && p.distanceTo(p_j) < f_2) {
+        	if (alive[j] && j != i && p.distanceTo(p_j) < f_2a) {
         		shift.sub((new THREE.Vector3()).subVectors(p_j, p));
         	}
         }
+        shift.multiplyScalar(f_2b);
         v.add(shift);
 
         // rule 1: center of mass
@@ -181,6 +189,16 @@ EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_
         // ----------- STUDENT CODE END ------------
     }
 
+};
+
+EulerUpdater.prototype.speedup = function ( particleAttributes, alive, factor ) {
+	var velocities = particleAttributes.velocity;
+	for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        var v = getElement(i, velocities).clone();
+        v.multiplyScalar(factor);
+        setElement(i, velocities, v);
+    }
 };
 
 // EulerUpdater.prototype.updateLifetimes = function ( particleAttributes, alive, delta_t) {

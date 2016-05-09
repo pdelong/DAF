@@ -50,7 +50,7 @@ SystemSettings.flocking = {
             attractors : [],
         },
         collidables: {
-            //boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],
+            boundingBoxes: [ [-boundary_w, boundary_w, -boundary_w, boundary_w, -boundary_w, boundary_w] ],
         },
     },
 

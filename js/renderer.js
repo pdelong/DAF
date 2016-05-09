@@ -120,3 +120,10 @@ window.addEventListener( 'keyup', function( event ) {
         ParticleEngine.reinitialize();
     }
 });
+
+window.addEventListener( 'keyup', function( event ) {
+    // only respond to 's' key
+    if ( event.which == 83 ) {
+        ParticleEngine.speedup();
+    }
+});

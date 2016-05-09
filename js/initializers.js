@@ -30,10 +30,13 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
         // for now we just generate a random point in the unit cube; needs to be fixed
-        var pos = new THREE.Vector3( 50.0 - 100.0 * Math.random(),
-                                     50.0 - 100.0 * Math.random(),
-                                     50.0 - 100.0 * Math.random() );
-
+        var pos = new THREE.Vector3();
+        while (true) {
+        	pos = new THREE.Vector3( 50.0 - 100.0 * Math.random(),
+            	                     50.0 - 100.0 * Math.random(),
+                	                 50.0 - 100.0 * Math.random());
+        	if (pos.length() < 50) break;
+        }
         // ----------- STUDENT CODE END ------------
         setElement( idx, positions, pos );
 
@@ -42,17 +45,24 @@ FlockingInitializer.prototype.initializePositions = function ( positions, toSpaw
 }
 
 FlockingInitializer.prototype.initializeVelocities = function ( velocities, positions, toSpawn ) {
-    var base_vel = this._opts.velocity;
+	
+	// generate general direction for flock
+	var fvx = 1.0 - Math.random() * 2.0;
+	var fvy = 1.0 - Math.random() * 2.0;
+	var fvz = 1.0 - Math.random() * 2.0;
+	var fvel = new THREE.Vector3(fvx, fvy, fvz);
+	fvel.multiplyScalar(2.5)
+
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
         // ----------- STUDENT CODE BEGIN ------------
-        // just to get started, make the velocity the same as the initial position
+        
         var vx = 1.0 - Math.random() * 2.0;
         var vy = 1.0 - Math.random() * 2.0;
         var vz = 1.0 - Math.random() * 2.0;
-        vel = new THREE.Vector3(vx, vy, vz);
-        vel.multiplyScalar(25.0);
-
+        var vel = new THREE.Vector3(vx, vy, vz);
+        vel.add(fvel);
+        vel.multiplyScalar(40.0);
 
         // ----------- STUDENT CODE END ------------
         setElement( idx, velocities, vel );
