@@ -1,9 +1,3 @@
-// TODO
-// Explore pools and what they bring into the picture
-// Add better interface for customization
-// Explore pools
-// optimize?
-
 var ParticleEngine = ParticleEngine || {
     _particles     : undefined,
     _particleCloud : undefined,
@@ -32,7 +26,7 @@ ParticleEngine.initParticle = function ( i, positions, velocities, colors, sizes
     // velocities
     velocities[ 3 * i + 0 ] = -10 + Math.random() * 20;
     velocities[ 3 * i + 1 ] = 10 + Math.random() * 40;
-    velocities[ 3 * i + 2 ] =  -10 + Math.random() * 20;
+    velocities[ 3 * i + 2 ] = -10 + Math.random() * 20;
 
     // colors
     var color = new THREE.Color( 0xabcdef );

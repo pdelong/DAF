@@ -13,6 +13,8 @@
 // Singleton Engine - we will have one particle engine per application,
 // driving the entire application.
 
+var old_objects = [];
+
 var ParticleEngine = ParticleEngine || new ( function() {
     var _self      = this;
 
@@ -122,6 +124,44 @@ var ParticleEngine = ParticleEngine || new ( function() {
         for ( var i = 0; i < _self._animations.length ; ++i ) {
             _self._emitters[i].addSpeed(_self.speedUpFactor);
         }
+    }
+
+    _self.movePredator = function(keycode) {
+        var delta = 5;
+        // move in positive x direction on key 'j'
+        if (keycode == 74)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.x += delta;
+
+        // move in negative x direction on key 'l'
+        if (keycode == 76)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.x -= delta;
+
+        // move in positive y direction on key 'i'
+        if (keycode == 73)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.y += delta;
+        // move in negative y direction on key 'k'
+        if (keycode == 75)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.y -= delta;
+
+        // move in positive y direction on key 'u'
+        if (keycode == 85)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.z += delta;
+
+        // move in negative y direction on key 'o'
+        if (keycode == 79)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                _self._emitters[i]._updater._opts.externalForces.predator.z -= delta;
+
+        // redraw predator
+        if (keycode == 74 || keycode == 76 || keycode == 73 || keycode == 75 || keycode == 85 || keycode == 79)
+            for (var i = 0; i < _self._emitters.length; ++i )
+                redraw(_self._emitters[i]._updater._opts.externalForces.predator, i);
+
     }
 
     _self.setSpawnAmount = function(amt) {
@@ -353,3 +393,15 @@ Emitter.prototype.addSpawn = function ( toAdd ) {
 Emitter.prototype.addSpeed = function ( toScale ) {
     this._updater.speedup( this._particleAttributes, this._initialized, toScale );
 };
+
+function redraw(pos, i) {
+    if (old_objects[i] !== undefined)
+        Scene.removeObject( old_objects[i] );
+
+    var sphere_geo = new THREE.SphereGeometry( 5.0 );
+    var phong      = new THREE.MeshPhongMaterial( {color: 0x4E2E28, emissive:0x442222, side: THREE.DoubleSide } );
+    var new_obj = new THREE.Mesh( sphere_geo, phong )
+    new_obj.position.set (pos.x, pos.y, pos.z);
+    old_objects[i] = new_obj;
+    Scene.addObject( new_obj );
+}

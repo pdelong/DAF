@@ -46,7 +46,8 @@ SystemSettings.flocking = {
     updaterFunction : EulerUpdater,
     updaterSettings : {
         externalForces : {
-            gravity :     new THREE.Vector3( 0, 0, 0),
+            gravity :     new THREE.Vector3( 0, 0, 0 ),
+            predator:     new THREE.Vector3( 0, 0, 0 ),
             attractors : [],
         },
         collidables: {
@@ -55,7 +56,7 @@ SystemSettings.flocking = {
     },
 
     // Scene
-    maxParticles :  1000,
+    maxParticles :  5000,
     particlesFreq : 1000,
     createScene : function () {
         drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));

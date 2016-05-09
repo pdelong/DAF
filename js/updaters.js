@@ -109,9 +109,12 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
     }
 };
 
+var counter = 0;
 EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, delta_t ) {
     var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
+
+    var predator = this._opts.externalForces.predator;
 
     // scale factors for each rule
     var f_1 = 0.00025; 	// center of mass
@@ -156,6 +159,12 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         var flock_pos = pos_sum.clone().sub(p).divideScalar(flock_size - 1);
         flock_pos.sub(p).multiplyScalar(f_1);
         v.add(flock_pos);
+
+        // predator avoidance
+        var dist_to_predator = p.distanceTo(predator);
+        var acc = (new THREE.Vector3()).subVectors(p, predator).normalize().multiplyScalar(100);
+        if (dist_to_predator < 10 && old_objects.length != 0)
+            v.add(acc.multiplyScalar(delta_t));
 
         setElement(i, velocities, v);
     }
