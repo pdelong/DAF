@@ -88,7 +88,6 @@ Renderer.update = function () {
 
 
     requestAnimationFrame( Renderer.update );
-
 }
 
 Renderer.snapShot = function () {
@@ -147,6 +146,7 @@ window.addEventListener( 'keyup', function( event ) {
 
     if ( event.which == 83 ) {
         ParticleEngine.speedup();
+        speedingUp += 0.3;
     }
 });
 
@@ -165,6 +165,6 @@ window.addEventListener( 'keydown', function( event ) {
     if (event.which == 85)
         Key_u = true;
     if (event.which == 79)
-        Key_o = true;
+        Key_o = true;   
 });
 

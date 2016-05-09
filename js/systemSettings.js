@@ -1,5 +1,5 @@
 var SystemSettings = SystemSettings || {};
-var boundary_w = 100;
+var boundary_w = 150;
 
 SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
 
@@ -72,12 +72,12 @@ SystemSettings.flocking = {
         drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
         drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
 
-        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));
+        // drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
+        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, boundary_w));
+        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
+        // drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
+        // drawLine(new THREE.Vector3(boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
+        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));
     },
 };
 

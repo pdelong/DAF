@@ -14,7 +14,7 @@ ParticleEngine.create = function () {
         depthWrite: false,
         transparent: true,
         vertexColors: THREE.VertexColors } );
-    this._particleCloud  = new THREE.PointCloud( this._particles, this._material );
+    // this._particleCloud  = new THREE.PointCloud( this._particles, this._material );
 };
 
 ParticleEngine.initParticle = function ( i, positions, velocities, colors, sizes, lifetimes ) {
@@ -130,6 +130,6 @@ ParticleEngine.update = function () {
 }
 
 
-ParticleEngine.getParticles = function () {
-    return this._particleCloud;
-};
+// ParticleEngine.getParticles = function () {
+//     return this._particleCloud;
+// };

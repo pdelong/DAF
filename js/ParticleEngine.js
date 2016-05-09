@@ -102,6 +102,10 @@ var ParticleEngine = ParticleEngine || new ( function() {
         return _self._emitters[emitter_idx].getDrawableParticles();
     }
 
+    _self.getBirds = function ( emitter_idx ) {
+        return _self._emitters[emitter_idx].getBirds();
+    }
+
     _self.getEmitters = function( ) {
         return _self._emitters;
     }
@@ -253,6 +257,14 @@ function Emitter ( opts ) {
     // Create the drawable particles - this is the object that three.js will use to draw stuff onto screen
     this._drawableParticles = new THREE.PointCloud( this._particles, this._material );
 
+    this._birds = {particles: this._particles, material: this._material, initialized: this._initialized};
+    // for (var i = 0; i < this._initialized.length; i++) {
+    //     bird = this._birds[ i ] = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: getElement(i, this._particleAttributes.color), side: THREE.DoubleSide } ) );
+    //     bird.phase = Math.floor( Math.random() * 62.83 );
+    //     var pos = getElement(0, this._particleAttributes.position);
+    //     bird.position.set(pos.x, pos.y, pos.z);
+    // }
+
     return this;
 };
 
@@ -308,6 +320,10 @@ Emitter.prototype.enableSorting = function( val ) {
 
 Emitter.prototype.getDrawableParticles = function () {
     return this._drawableParticles;
+};
+
+Emitter.prototype.getBirds = function () {
+    return this._birds;
 };
 
 Emitter.prototype.sortParticles = function () {

@@ -3,30 +3,15 @@
  *  We provide an example of simple updater that updates pixel positions based on initial velocity and gravity
  */
 
+var speedingUp = 0;
+
 ////////////////////////////////////////////////////////////////////////////////
-// Collisions
+// Boundaries
 ////////////////////////////////////////////////////////////////////////////////
 
-var Collisions = Collisions || {};
+var Boundaries = Boundaries || {};
 
-Collisions.Plane = function ( particleAttributes, alive, delta_t, plane,damping ) {
-    var positions    = particleAttributes.position;
-    var velocities   = particleAttributes.velocity;
-
-    for ( var i = 0 ; i < alive.length ; ++i ) {
-
-        if ( !alive[i] ) continue;
-        // ----------- STUDENT CODE BEGIN ------------
-        var pos = getElement( i, positions );
-        var vel = getElement( i, velocities );
-
-        setElement( i, positions, pos );
-        setElement( i, velocities, vel );
-        // ----------- STUDENT CODE END ------------
-    }
-};
-
-Collisions.boundingBox = function ( particleAttributes, alive, delta_t, boundingBox ) {
+Boundaries.boundingBox = function ( particleAttributes, alive, delta_t, boundingBox ) {
     var positions    = particleAttributes.position;
     var velocities   = particleAttributes.velocity;
 
@@ -36,7 +21,6 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
     for ( var i = 0 ; i < alive.length ; ++i ) {
 
         if ( !alive[i] ) continue;
-        // ----------- STUDENT CODE BEGIN ------------
         var pos = getElement( i, positions );
         var vel = getElement( i, velocities );
 
@@ -69,7 +53,6 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
 
         setElement( i, positions, pos );
         setElement( i, velocities, vel );
-        // ----------- STUDENT CODE END ------------
     }
 }
 
@@ -183,12 +166,17 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
     for ( var i = 0 ; i < alive.length ; ++i ) {
 
         if ( !alive[i] ) continue;
-        // ----------- STUDENT CODE BEGIN ------------
         var c = getElement( i, colors );
+        
+        c = new THREE.Vector4(speedingUp, 0 , 0, 1);
 
         setElement( i, colors, c );
-        // ----------- STUDENT CODE END ------------
     }
+    
+    if (speedingUp > 0)
+        speedingUp -= 0.01;
+    else
+        speedingUp = 0;
 };
 
 EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_t ) {
@@ -235,22 +223,14 @@ EulerUpdater.prototype.speedup = function ( particleAttributes, alive, factor ) 
 
 // };
 
-EulerUpdater.prototype.collisions = function ( particleAttributes, alive, delta_t ) {
+EulerUpdater.prototype.boundaries = function ( particleAttributes, alive, delta_t ) {
     if ( !this._opts.collidables ) {
         return;
     }
-    if ( this._opts.collidables.bouncePlanes ) {
-        for (var i = 0 ; i < this._opts.collidables.bouncePlanes.length ; ++i ) {
-            var plane = this._opts.collidables.bouncePlanes[i].plane;
-            var damping = this._opts.collidables.bouncePlanes[i].damping;
-            Collisions.Plane( particleAttributes, alive, delta_t, plane, damping );
-        }
-    }
-
-    // axis box code
+    // boundary box code
     if ( this._opts.collidables.boundingBoxes ) {
         for (var i = 0; i < this._opts.collidables.boundingBoxes.length ; ++i ) {
-            Collisions.boundingBox (particleAttributes, alive, delta_t, this._opts.collidables.boundingBoxes[i]);
+            Boundaries.boundingBox (particleAttributes, alive, delta_t, this._opts.collidables.boundingBoxes[i]);
         }
     }
 };
@@ -261,7 +241,7 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
     this.updateVelocities( particleAttributes, alive, delta_t );
     this.updatePositions( particleAttributes, alive, delta_t );
 
-    this.collisions( particleAttributes, alive, delta_t );
+    this.boundaries( particleAttributes, alive, delta_t );
 
     this.updateColors( particleAttributes, alive, delta_t );
     this.updateSizes( particleAttributes, alive, delta_t );

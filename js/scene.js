@@ -77,21 +77,21 @@ Scene.removeObjects = function ( object ) {
 
 // axis and grid
 Scene.addAxis = function() {
-    var r = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.850, 0.325, 0.098 ), linewidth: 4, opacity: 0.5, transparent: true });
-    var g = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.466, 0.674, 0.188 ), linewidth: 4, opacity: 0.5, transparent: true });
-    var b = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.000, 0.447, 0.741 ), linewidth: 4, opacity: 0.5, transparent: true });
+    var r = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.850, 0.325, 0.098 ), linewidth: 1, opacity: 0.25, transparent: true });
+    var g = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.466, 0.674, 0.188 ), linewidth: 1, opacity: 0.25, transparent: true });
+    var b = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.000, 0.447, 0.741 ), linewidth: 1, opacity: 0.25, transparent: true });
 
     var x_axis_geo = new THREE.Geometry();
     var y_axis_geo = new THREE.Geometry();
     var z_axis_geo = new THREE.Geometry();
-    x_axis_geo.vertices.push( new THREE.Vector3( -10.5, 0, 0 ) );
-    x_axis_geo.vertices.push( new THREE.Vector3(  10.5, 0, 0 ) );
+    x_axis_geo.vertices.push( new THREE.Vector3( -1000, 0, 0 ) );
+    x_axis_geo.vertices.push( new THREE.Vector3(  1000, 0, 0 ) );
 
-    y_axis_geo.vertices.push( new THREE.Vector3( 0, -10.5, 0 ) );
-    y_axis_geo.vertices.push( new THREE.Vector3( 0,  10.5, 0 ) );
+    y_axis_geo.vertices.push( new THREE.Vector3( 0, -1000, 0 ) );
+    y_axis_geo.vertices.push( new THREE.Vector3( 0,  1000, 0 ) );
 
-    z_axis_geo.vertices.push( new THREE.Vector3( 0, 0, -10.5 ) );
-    z_axis_geo.vertices.push( new THREE.Vector3( 0, 0,  10.5 ) );
+    z_axis_geo.vertices.push( new THREE.Vector3( 0, 0, -1000 ) );
+    z_axis_geo.vertices.push( new THREE.Vector3( 0, 0,  1000 ) );
 
     var x_axis = new THREE.Line( x_axis_geo, r );
     var y_axis = new THREE.Line( y_axis_geo, b );
