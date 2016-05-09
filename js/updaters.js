@@ -49,9 +49,9 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         var min_z = boundingBox[4];
         var max_z = boundingBox[5];
 
-        var center = new THREE.Vector3((min_x + max_x) / 2, 
-        							   (min_y + max_y) / 2, 
-        							   (min_z + max_z) / 2);
+        var center = new THREE.Vector3((min_x + max_x) / 2,
+                                       (min_y + max_y) / 2,
+                                       (min_z + max_z) / 2);
 
         // constraint code
         // if (new_pos.x < min_x) pos.x = max_x;
@@ -62,10 +62,10 @@ Collisions.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         // if (new_pos.z > max_z) pos.z = min_z;
 
         // attractor code
-       	if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
-       		new_pos.y > max_y || new_pos.z < min_z || new_pos.z > max_z) {
-       		vel.add(center.sub(new_pos).multiplyScalar(0.0025));
-       	}
+        if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
+                new_pos.y > max_y || new_pos.z < min_z || new_pos.z > max_z) {
+            vel.add(center.sub(new_pos).multiplyScalar(0.0025));
+        }
 
         setElement( i, positions, pos );
         setElement( i, velocities, vel );
@@ -125,7 +125,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     var flock_size = 0;
     var pos_sum = new THREE.Vector3();
     var vel_sum = new THREE.Vector3();
-	for (var i = 0 ; i < alive.length ; ++i) {
+    for (var i = 0 ; i < alive.length ; ++i) {
         if (!alive[i]) continue;
         flock_size++;
         pos_sum.add(getElement(i, positions));
@@ -145,12 +145,12 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         v.add(flock_vel);
 
         // rule 2: collision avoidance
-    	var shift = new THREE.Vector3();
+        var shift = new THREE.Vector3();
         for (var j = 0 ; j < alive.length; ++j) {
-        	var p_j = getElement(j, positions);
-        	if (alive[j] && j != i && p.distanceTo(p_j) < f_2a) {
-        		shift.sub((new THREE.Vector3()).subVectors(p_j, p));
-        	}
+            var p_j = getElement(j, positions);
+            if (alive[j] && j != i && p.distanceTo(p_j) < f_2a) {
+                shift.sub((new THREE.Vector3()).subVectors(p_j, p));
+            }
         }
         shift.multiplyScalar(f_2b);
         v.add(shift);
@@ -201,8 +201,8 @@ EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_
 };
 
 EulerUpdater.prototype.speedup = function ( particleAttributes, alive, factor ) {
-	var velocities = particleAttributes.velocity;
-	for (var i = 0 ; i < alive.length ; ++i) {
+    var velocities = particleAttributes.velocity;
+    for (var i = 0 ; i < alive.length ; ++i) {
         if (!alive[i]) continue;
         var v = getElement(i, velocities).clone();
         v.multiplyScalar(factor);

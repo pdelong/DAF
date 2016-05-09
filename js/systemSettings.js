@@ -77,12 +77,12 @@ SystemSettings.flocking = {
         drawLine(new THREE.Vector3(-boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
         drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
         drawLine(new THREE.Vector3(boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));       
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));
     },
 };
 
 // draw line from a to b
-function drawLine( a, b ) 
+function drawLine( a, b )
 {
     var lineGeometry = new THREE.Geometry();
     var vertArray = lineGeometry.vertices;

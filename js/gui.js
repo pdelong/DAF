@@ -59,7 +59,7 @@ Gui.toCommandString = function () {
 
             if( !isNaN(parseFloat(val)) && val.toString().indexOf('.')>=0 ) {
                 val = val.toFixed(2);
-             }
+            }
             url += prop + "=" + val;
         }
     }

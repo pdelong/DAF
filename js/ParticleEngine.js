@@ -260,22 +260,22 @@ Emitter.prototype.restart = function() {
 
     for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
     }
-        this._initialized[i] = 0;
+    this._initialized[i] = 0;
+}
+
+for ( var attributeKey in this._particleAttributes ) {
+
+    var attribute       = this._particleAttributes[attributeKey];
+    var attributeArray  = attribute.array;
+    var attributeLength = attribute.itemSize;
+
+    for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
+        for ( var j = 0 ; j < attributeLength ; ++j ) {
+            attributeArray[ attributeLength * i + j ] = 1e-9;
+        }
     }
 
-    for ( var attributeKey in this._particleAttributes ) {
-
-        var attribute       = this._particleAttributes[attributeKey];
-        var attributeArray  = attribute.array;
-        var attributeLength = attribute.itemSize;
-
-        for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
-            for ( var j = 0 ; j < attributeLength ; ++j ) {
-                attributeArray[ attributeLength * i + j ] = 1e-9;
-            }
-        }
-
-        attribute.needsUpdate = true;
+    attribute.needsUpdate = true;
 
 }
 
@@ -340,9 +340,9 @@ Emitter.prototype.sortParticles = function () {
     }
 
     initialized_cpy = []
-    for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
-        initialized_cpy[ i ] = this._initialized[ this._distances[i][1] ];
-    }
+        for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
+            initialized_cpy[ i ] = this._initialized[ this._distances[i][1] ];
+        }
 
     for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
         this._initialized[ i ] = initialized_cpy[i];
@@ -401,7 +401,7 @@ function redraw(pos, i) {
     var sphere_geo = new THREE.SphereGeometry( 5.0 );
     var phong      = new THREE.MeshPhongMaterial( {color: 0x4E2E28, emissive:0x442222, side: THREE.DoubleSide } );
     var new_obj = new THREE.Mesh( sphere_geo, phong )
-    new_obj.position.set (pos.x, pos.y, pos.z);
+        new_obj.position.set (pos.x, pos.y, pos.z);
     old_objects[i] = new_obj;
     Scene.addObject( new_obj );
 }

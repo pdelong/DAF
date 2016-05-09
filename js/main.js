@@ -63,7 +63,7 @@ window.onload = function() {
 
     // Setup renderer, scene and gui
     Gui.init( Main.controlsChangeCallback,
-              Main.displayChangeCallback );
+            Main.displayChangeCallback );
     Scene.create();
 
     // Add particle system
