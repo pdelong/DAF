@@ -134,7 +134,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
 
-        if (v.length() > 50)
+        if (v.length() > 100)
             v.sub(v.clone().multiplyScalar(.1*delta_t));
         if (v.length() < 20)
             v.add(v.clone().multiplyScalar(.1*delta_t*(10-v.length())));
@@ -162,14 +162,24 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 };
 
 EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delta_t ) {
-    var colors    = particleAttributes.color;
+    var colors     = particleAttributes.color;
+    var velocities = particleAttributes.velocity;
+
+    var flock_size = 0;
+    var vel_sum = new THREE.Vector3();
+    for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        flock_size++;
+        vel_sum.add(getElement(i, velocities));
+    }
+    var flock_vel = vel_sum.multiplyScalar(1 / flock_size).normalize();
 
     for ( var i = 0 ; i < alive.length ; ++i ) {
 
         if ( !alive[i] ) continue;
-        var c = getElement( i, colors );
-        
-        c = new THREE.Vector4(speedingUp, 0 , 0, 1);
+        var v = getElement( i, velocities ).clone().normalize();
+        var dot = 0.5 - 0.5 * v.dot(flock_vel);
+        c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, dot, 1);
 
         setElement( i, colors, c );
     }
@@ -181,11 +191,27 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
 };
 
 EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_t ) {
-    var sizes    = particleAttributes.size;
+    var sizes     = particleAttributes.size;
+    var positions = particleAttributes.position;
+    var base_size = SystemSettings.flocking.initializerSettings.size;
+
+    var flock_size = 0;
+    var pos_sum = new THREE.Vector3();
+    for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        flock_size++;
+        pos_sum.add(getElement(i, positions));
+    }
+    var flock_pos = pos_sum.multiplyScalar(1 / flock_size);
 
     for ( var i = 0 ; i < alive.length ; ++i ) {
         if ( !alive[i] ) continue;
-        var s = getElement( i, sizes );
+        var s = base_size
+        var p = getElement(i, positions);
+        var dist = flock_pos.clone().sub(p).length(); 
+        if (dist < 50) {
+            s += 2 * s * ((50 - dist) / 50);
+        }
 
         setElement( i, sizes, s );
     }
