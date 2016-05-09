@@ -20,8 +20,9 @@ Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 // (the variable Gui.defaults below then carries their default values, which we set later)
 Gui.values = {
     windowSize:  Gui.windowSizes[0],
-    // reset:       function () {},
+    reset:       function () {},
     stopTime:    function () {},
+    help:  		 function () {},
     spawnAmount: Gui.spawnAmount[3],
     // guiToBatch : function() {},
     blendTypes:  Gui.blendTypes[0],
@@ -74,10 +75,11 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
 
     // gui controls are added to this object below
     var gc = {};
-    gc.stopTime  = gui.add( Gui.values, 'stopTime' ).name( "Pause" );
-    // gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
+    gc.stopTime  = gui.add( Gui.values, 'stopTime' ).name("Pause");
+    gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
+    gc.help		 = gui.add( Gui.values, 'help').name("Help");
     gc.systems   = gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
-    gc.spawnAmount = gui.add( Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
+    gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
 
     // var disp = gui.addFolder( "DISPLAY OPTIONS");
     // gc.blends    = disp.add( Gui.values, 'blendTypes', Gui.blendTypes ).name("Blending Types");
@@ -90,7 +92,12 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     size.onChange( Renderer.onWindowResize );
 
     gc.stopTime.onChange( ParticleEngine.pause );
-    // gc.reset.onChange( ParticleEngine.restart );
+    gc.reset.onChange( ParticleEngine.restart );
+    gc.help.onChange( function() {
+    	Gui.alertOnce("Press 'a' to add boids, 's' to speed up birds,<br>" +
+    				  "and use i+k, j+l, and u+o to control the <br>" + 
+    				  "x, y, and z of the predator.");
+    });
 
     // gc.blends.onChange( function( value ) {
     //     var emitters = ParticleEngine.getEmitters();
@@ -146,22 +153,5 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     //         emitters[i]._sorting = value;
     //     }
     // });
-};
-
-
-// non-implemented alert functionality
-Gui.alertOnce = function( msg ) {
-    var mainDiv = document.getElementById('main_div');
-    mainDiv.style.opacity = "0.3";
-    var alertDiv = document.getElementById('alert_div');
-    alertDiv.innerHTML = '<p>'+ msg + '</p><button id="ok" onclick="Gui.closeAlert()">ok</button>';
-    alertDiv.style.display = 'inline';
-};
-
-Gui.closeAlert = function () {
-    var mainDiv = document.getElementById('main_div');
-    mainDiv.style.opacity = "1";
-    var alertDiv = document.getElementById('alert_div');
-    alertDiv.style.display = 'none';
 };
 

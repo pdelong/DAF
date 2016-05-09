@@ -259,9 +259,12 @@ function Emitter ( opts ) {
 Emitter.prototype.restart = function() {
 
     for ( var i = 0 ; i < this._maxParticleCount ; ++i ) {
+    	this._initialized[i] = 0;
+    	killParticle(i, this._particleAttributes, this._initialized);
     }
-    this._initialized[i] = 0;
-}
+    this._initializer.initialize(this._particleAttributes, this.addSpawn(250), this._width, this._height);
+
+};
 
 for ( var attributeKey in this._particleAttributes ) {
 
@@ -283,10 +286,8 @@ Emitter.prototype.update = function( delta_t ) {
     // how many particles should we add?
     var toAdd = Math.floor( delta_t * this._particlesPerSecond );
 
-    if ( toAdd > 0 ) {
-        // this._initializer.initialize ( this._particleAttributes, this.getSpawnable( toAdd ), this._width, this._height );
-        if (!this._initializer.initialized)
-            this._initializer.initialize ( this._particleAttributes, this.addSpawn( 250 ), this._width, this._height );
+    if (toAdd > 0 && !this._initializer.initialized) {
+        this._initializer.initialize (this._particleAttributes, this.addSpawn(250), this._width, this._height);
     }
 
     // add check for existence
@@ -299,7 +300,7 @@ Emitter.prototype.update = function( delta_t ) {
 
     // for visibility culling
     this._drawableParticles.geometry.computeBoundingSphere();
-}
+};
 
 
 Emitter.prototype.enableSorting = function( val ) {

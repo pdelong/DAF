@@ -63,14 +63,14 @@ img {
     position:absolute;
     top:  50px;
     left: 50px;
-    height:100px;
+    height:120px;
     width: 340px;
     font-size:14px;
     font-weight:bold;
     text-align: center;
     align: center;
     font-color:#ddd;
-    background-color:#422;
+    background-color:#222;
     border:1px solid #333;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;

@@ -3,7 +3,6 @@
  *  We provide an example of simple initializer that generates points withing a cube.
  */
 
-
 function VoidInitializer ( opts ) {
     this._opts = opts;
     return this;
@@ -12,6 +11,7 @@ function VoidInitializer ( opts ) {
 VoidInitializer.prototype.initialize = function ( particleAttributes, toSpawn ) {
 
 };
+
 ////////////////////////////////////////////////////////////////////////////////
 // Basic Initializer
 ////////////////////////////////////////////////////////////////////////////////
