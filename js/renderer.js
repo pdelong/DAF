@@ -129,7 +129,7 @@ window.addEventListener( 'keyup', function( event ) {
 });
 
 // predator moving controls
-window.addEventListener( 'keyup', function( event ) {
+window.addEventListener( 'keydown', function( event ) {
     // only respond to 's' key
     if ( event.which == 73 || event.which == 75 || event.which == 74 || event.which == 76 || event.which == 85 || event.which == 79) {
         ParticleEngine.movePredator(event.which);
