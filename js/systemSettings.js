@@ -72,6 +72,30 @@ SystemSettings.flocking = {
         drawLine(new THREE.Vector3(-boundary_w,  boundary_w,  boundary_w), new THREE.Vector3( boundary_w,  boundary_w,  boundary_w));
         drawLine(new THREE.Vector3( boundary_w,  boundary_w, -boundary_w), new THREE.Vector3( boundary_w,  boundary_w,  boundary_w));
         drawLine(new THREE.Vector3( boundary_w,  boundary_w, -boundary_w), new THREE.Vector3(-boundary_w,  boundary_w, -boundary_w));
+        
+        var plane_geo = new THREE.PlaneBufferGeometry( 200, 200, 0, 1 );
+        var phong     = new THREE.MeshPhongMaterial( {color: 0x2194ce, emissive:0xff00aa, side: THREE.DoubleSide } );
+        phong.opacity = 0.1;
+        phong.transparent = true;
+
+        var plane1 = new THREE.Mesh( plane_geo, phong );
+        plane1.position.set(0, 0, -100);
+        Scene.addObject( plane1 );
+        // plane.rotation.x = -1.57;
+        var plane2 = new THREE.Mesh( plane_geo, phong );
+        plane2.position.set(0, -100, 0);
+        plane2.rotation.x = 1.57;
+        console.log(plane2);
+        Scene.addObject( plane2 );
+
+        var plane3 = new THREE.Mesh( plane_geo, phong );
+        plane3.position.set(-100, 0, 0);
+        plane3.rotation.y = 1.57;
+        Scene.addObject( plane3 );
+        
+        // plane.position.y = 0;
+
+        
     },
 };
 
@@ -81,7 +105,7 @@ function drawLine( a, b ) {
     var vertArray = lineGeometry.vertices;
     vertArray.push( a, b );
     lineGeometry.computeLineDistances();
-    var lineMaterial = new THREE.LineDashedMaterial( { color: 0x000080, dashSize: 1, gapSize: 1 } );
+    var lineMaterial = new THREE.LineDashedMaterial( { color: 0x000080, linewidth: 2, dashSize: 2, gapSize: 2 } );
     var line = new THREE.Line( lineGeometry, lineMaterial );
     Scene.addObject(line);
 }
