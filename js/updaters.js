@@ -15,9 +15,6 @@ Boundaries.boundingBox = function ( particleAttributes, alive, delta_t, bounding
     var positions    = particleAttributes.position;
     var velocities   = particleAttributes.velocity;
 
-    // var sphere_center = new THREE.Vector3(sphere.x, sphere.y, sphere.z);
-    // var sphere_radius = sphere.w;
-
     for ( var i = 0 ; i < alive.length ; ++i ) {
 
         if ( !alive[i] ) continue;
@@ -36,14 +33,6 @@ Boundaries.boundingBox = function ( particleAttributes, alive, delta_t, bounding
         var center = new THREE.Vector3((min_x + max_x) / 2,
                                        (min_y + max_y) / 2,
                                        (min_z + max_z) / 2);
-
-        // constraint code
-        // if (new_pos.x < min_x) pos.x = max_x;
-        // if (new_pos.x > max_x) pos.x = min_x;
-        // if (new_pos.y < min_y) pos.y = max_y;
-        // if (new_pos.y > max_y) pos.y = min_y;
-        // if (new_pos.z < min_z) pos.z = max_z;
-        // if (new_pos.z > max_z) pos.z = min_z;
 
         // attractor code
         if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
@@ -99,10 +88,11 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     var predator = this._opts.externalForces.predator;
 
     // scale factors for each rule
-    var f_1 = 0.00025; 	// center of mass
-    var f_2a = 15; 		// collision avoidance: distance threshold
-    var f_2b = 0.001;	// collision avoidance: shift scale factor
-    var f_3 = 0.005;	// velocity matching
+    var f_1 = 0.00025 * Gui.factors[0]; 	// center of mass
+    var f_2a = 15 * Gui.factors[1]; 		// collision avoidance: distance threshold
+    var f_2b = 0.001 * Gui.factors[1];		// collision avoidance: shift scale factor
+    var f_3 = 0.005 * Gui.factors[2];		// velocity matching
+    console.log(Gui.factors[0]);
 
     var flock_size = 0;
     var pos_sum = new THREE.Vector3();

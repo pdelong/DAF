@@ -179,8 +179,6 @@ function Emitter ( opts ) {
     this._initializer          = undefined;
     this._updater              = undefined;
     this._cloth                = false;
-    this._width                = undefined;
-    this._height               = undefined;
     this._attributeInformation = {
         position:      3,
         velocity:      3,
@@ -262,7 +260,7 @@ Emitter.prototype.restart = function() {
     	this._initialized[i] = 0;
     	killParticle(i, this._particleAttributes, this._initialized);
     }
-    this._initializer.initialize(this._particleAttributes, this.addSpawn(250), this._width, this._height);
+    this._initializer.initialize(this._particleAttributes, this.addSpawn(250) );
 
 };
 
@@ -287,11 +285,11 @@ Emitter.prototype.update = function( delta_t ) {
     var toAdd = Math.floor( delta_t * this._particlesPerSecond );
 
     if (toAdd > 0 && !this._initializer.initialized) {
-        this._initializer.initialize (this._particleAttributes, this.addSpawn(250), this._width, this._height);
+        this._initializer.initialize (this._particleAttributes, this.addSpawn(250) );
     }
 
     // add check for existence
-    this._updater.update( this._particleAttributes, this._initialized, delta_t, this._width, this._height );
+    this._updater.update( this._particleAttributes, this._initialized, delta_t );
 
     // sorting -> Move it to camera update / loop update so that it is updated each time even if time is paused?
     if ( this._sorting === true ) {
@@ -375,10 +373,10 @@ Emitter.prototype.addSpawn = function ( toAdd ) {
     }
 
     this._initializer.initialized = false;
-    this._initializer.initialize ( this._particleAttributes, toSpawn, this._width, this._height );
+    this._initializer.initialize ( this._particleAttributes, toSpawn);
 
     // add check for existence
-    this._updater.update( this._particleAttributes, this._initialized, 0, this._width, this._height );
+    this._updater.update( this._particleAttributes, this._initialized, 0 );
 
     // sorting -> Move it to camera update / loop update so that it is updated each time even if time is paused?
     if ( this._sorting === true ) {

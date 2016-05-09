@@ -15,6 +15,8 @@ Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
 Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 
+Gui.factors = [ 1, 1, 1 ];
+
 
 // due to a bug in dat GUI we need to initialize floats to non-interger values (like 0.5)
 // (the variable Gui.defaults below then carries their default values, which we set later)
@@ -23,6 +25,9 @@ Gui.values = {
     reset:       function () {},
     stopTime:    function () {},
     help:  		 function () {},
+    rule1:    	 Gui.factors[0],
+    rule2:    	 Gui.factors[1],
+    rule3:    	 Gui.factors[2],
     spawnAmount: Gui.spawnAmount[3],
     // guiToBatch : function() {},
     blendTypes:  Gui.blendTypes[0],
@@ -75,11 +80,16 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
 
     // gui controls are added to this object below
     var gc = {};
-    gc.stopTime  = gui.add( Gui.values, 'stopTime' ).name("Pause");
-    gc.reset     = gui.add( Gui.values, 'reset' ).name("Reset");
-    gc.help		 = gui.add( Gui.values, 'help').name("Help");
-    gc.systems   = gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
+    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
+    gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
+    gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
+    gc.help 	= gui.add( Gui.values, 'help').name("Help");
     gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
+
+    var advanced = gui.addFolder("Flocking Parameters");
+    gc.rule1 = advanced.add(Gui.values, 'rule1', 0.2, 5).name("Center of Mass");
+    gc.rule2 = advanced.add(Gui.values, 'rule2', 0.5, 2).name("Collision Avoidance");
+    gc.rule3 = advanced.add(Gui.values, 'rule3', 0.2, 5).name("Velocity Matching");
 
     // var disp = gui.addFolder( "DISPLAY OPTIONS");
     // gc.blends    = disp.add( Gui.values, 'blendTypes', Gui.blendTypes ).name("Blending Types");
@@ -123,14 +133,26 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     //     }
     // } );
 
-    gc.systems.onChange( function(value) {
-        var settings = SystemSettings[value];
-        Main.particleSystemChangeCallback ( settings );
-    } );
+    // gc.systems.onChange( function(value) {
+    //     var settings = SystemSettings[value];
+    //     Main.particleSystemChangeCallback ( settings );
+    // } );
 
     gc.spawnAmount.onChange( function(value) {
         ParticleEngine.setSpawnAmount(value);
     } );
+
+    gc.rule1.onChange( function(value) {
+    	Gui.factors[0] = value;
+    });
+
+    gc.rule2.onChange( function(value) {
+    	Gui.factors[1] = value;
+    });
+
+    gc.rule3.onChange( function(value) {
+    	Gui.factors[2] = value;
+    });
 
     // gc.depthTest.onChange( function( value ) {
     //     var emitters = ParticleEngine.getEmitters();
