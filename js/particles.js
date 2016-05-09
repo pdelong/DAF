@@ -129,7 +129,6 @@ ParticleEngine.update = function () {
     this._particles.attributes.lifetime.needsUpdate = true;
 }
 
-
 // ParticleEngine.getParticles = function () {
 //     return this._particleCloud;
 // };

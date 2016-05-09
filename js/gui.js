@@ -7,8 +7,6 @@ Gui.sceneList = [];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.blendTypes = [ "Normal", "Additive" ];
-
 Gui.particleSystems = [ "flocking" ];
 
 Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
@@ -29,8 +27,6 @@ Gui.values = {
     rule2:    	 Gui.factors[1],
     rule3:    	 Gui.factors[2],
     spawnAmount: Gui.spawnAmount[3],
-    // guiToBatch : function() {},
-    blendTypes:  Gui.blendTypes[0],
     textures:    Gui.textures[0],
     systems:     Gui.particleSystems[0],
     depthTest:   true,
@@ -56,35 +52,18 @@ Gui.closeAlert = function () {
     alertDiv.style.display = 'none';
 };
 
-Gui.toCommandString = function () {
-    var url = '';
-    for ( var prop in Gui.defaults ) {
-        if( Gui.values[prop] !== undefined && Gui.values[prop] !== Gui.defaults[prop]) {
-            url += "&";
-            var val = Gui.values[prop];
-
-            if( !isNaN(parseFloat(val)) && val.toString().indexOf('.')>=0 ) {
-                val = val.toFixed(2);
-            }
-            url += prop + "=" + val;
-        }
-    }
-    return url;
-}
-
 Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeCallback ) {
     // create top level controls
     var gui     = new dat.GUI( { width: 300 } );
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
-    // var gToB    = gui.add( Gui.values, 'guiToBatch' );
 
     // gui controls are added to this object below
     var gc = {};
-    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("ParticleSystems");
+    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Particle System");
     gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
     gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
     gc.help 	= gui.add( Gui.values, 'help').name("Help");
-    gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("SpawnAmount");
+    gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("Spawn Amount");
 
     var advanced = gui.addFolder("Flocking Parameters");
     gc.rule1 = advanced.add(Gui.values, 'rule1', 0.2, 5).name("Center of Mass");
@@ -108,22 +87,6 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     				  "and use i+k, j+l, and u+o to control the <br>" + 
     				  "x, y, and z of the predator.");
     });
-
-    // gc.blends.onChange( function( value ) {
-    //     var emitters = ParticleEngine.getEmitters();
-    //     var blendType;
-    //     if ( value == "Normal" ) {
-    //         var blendType = THREE.NormalBlending;
-    //     } else if ( value == "Additive" ) {
-    //         var blendType = THREE.AdditiveBlending;
-    //     } else {
-    //         console.log( "Blend type unknown!" );
-    //         return;
-    //     }
-    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
-    //         emitters[i]._material.blending = blendType ;
-    //     }
-    // } );
 
     // gc.textures.onChange( function( value ) {
     //     var emitters = ParticleEngine.getEmitters();

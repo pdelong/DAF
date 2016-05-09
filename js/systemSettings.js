@@ -1,3 +1,4 @@
+
 var SystemSettings = SystemSettings || {};
 var boundary_w = 100;
 
@@ -10,8 +11,8 @@ SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
     attributes: {
         velocity: { type: 'v3', value: new THREE.Vector3() },
         color:    { type: 'v4', value: new THREE.Vector3( 0.0, 0.0, 1.0, 1.0 ) },
-        lifetime: { type: 'f', value: 1.0 },
-        size:     { type: 'f', value: 1.0 },
+        lifetime: { type:  'f', value: 1.0 },
+        size:     { type:  'f', value: 1.0 },
     },
 
     vertexShader:   document.getElementById( 'vertexShader' ).textContent,
@@ -21,7 +22,7 @@ SystemSettings.standardMaterial = new THREE.ShaderMaterial( {
     transparent: Gui.values.transparent,
     depthTest:   Gui.values.depthTest,
 
-} );
+});
 
 ////////////////////////////////////////////////////////////////////////////////
 // Flocking system
@@ -35,7 +36,7 @@ SystemSettings.flocking = {
     // Initialization
     initializerFunction : FlockingInitializer,
     initializerSettings : {
-        sphere: new THREE.Vector4 ( 0.0, 0.0, 0.0, 10.0),
+        sphere:   new THREE.Vector4 ( 0.0, 0.0, 0.0, 10.0),
         color:    new THREE.Vector4 ( 0.0, 0.0, 0.0, 1.0 ),
         velocity: new THREE.Vector3 ( 0.0, 0.0, 0.0),
         lifetime: 100,
@@ -46,8 +47,8 @@ SystemSettings.flocking = {
     updaterFunction : EulerUpdater,
     updaterSettings : {
         externalForces : {
-            gravity :     new THREE.Vector3( 0, 0, 0 ),
-            predator:     new THREE.Vector3( 0, 0, 0 ),
+            gravity :    new THREE.Vector3( 0, 0, 0 ),
+            predator:    new THREE.Vector3( 0, 0, 0 ),
             attractors : [],
         },
         collidables: {
@@ -59,31 +60,23 @@ SystemSettings.flocking = {
     maxParticles :  5000,
     particlesFreq : 1000,
     createScene : function () {
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, -boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(-boundary_w, -boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-        drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
-        drawLine(new THREE.Vector3(boundary_w, boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-
-        // drawLine(new THREE.Vector3(-boundary_w, boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
-        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(boundary_w, -boundary_w, boundary_w));
-        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, boundary_w));
-        // drawLine(new THREE.Vector3(boundary_w, -boundary_w, boundary_w), new THREE.Vector3(boundary_w, boundary_w, -boundary_w));
-        // drawLine(new THREE.Vector3(boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, -boundary_w));
-        // drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, boundary_w, boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w,  boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3( boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3( boundary_w,  boundary_w, -boundary_w), new THREE.Vector3( boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3( boundary_w, -boundary_w,  boundary_w), new THREE.Vector3( boundary_w, -boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3( boundary_w, -boundary_w,  boundary_w), new THREE.Vector3( boundary_w,  boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3( boundary_w, -boundary_w,  boundary_w), new THREE.Vector3(-boundary_w, -boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w,  boundary_w,  boundary_w), new THREE.Vector3(-boundary_w, -boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w,  boundary_w,  boundary_w), new THREE.Vector3(-boundary_w,  boundary_w, -boundary_w));
+        drawLine(new THREE.Vector3(-boundary_w,  boundary_w,  boundary_w), new THREE.Vector3( boundary_w,  boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3( boundary_w,  boundary_w, -boundary_w), new THREE.Vector3( boundary_w,  boundary_w,  boundary_w));
+        drawLine(new THREE.Vector3( boundary_w,  boundary_w, -boundary_w), new THREE.Vector3(-boundary_w,  boundary_w, -boundary_w));
     },
 };
 
 // draw line from a to b
-function drawLine( a, b )
-{
+function drawLine( a, b ) {
     var lineGeometry = new THREE.Geometry();
     var vertArray = lineGeometry.vertices;
     vertArray.push( a, b );

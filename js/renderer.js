@@ -13,7 +13,6 @@ var Renderer = Renderer || {
     _width      : undefined,
     _height     : undefined,
     _aspect     : undefined,
-
 };
 
 Renderer.getDims = function() {
@@ -50,7 +49,6 @@ Renderer.create = function( scene, canvas ) {
     Renderer._camera   = new THREE.PerspectiveCamera ( 55, Renderer._aspect, 0.01, 5000 );
     Renderer._controls = new THREE.TrackballControls ( Renderer._camera, Renderer._renderer.domElement );
     Renderer._camera.position.set( 300, 200, 400 );
-
 
     // Add rendering stats, so we know the performance
     var container = document.getElementById( "stats" );
@@ -150,7 +148,7 @@ window.addEventListener( 'keyup', function( event ) {
     }
 });
 
-// predator moving controls
+// predator movement controls
 window.addEventListener( 'keydown', function( event ) {
 
     // As long as key is down we want to move the predator

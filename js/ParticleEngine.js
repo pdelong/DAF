@@ -128,6 +128,7 @@ var ParticleEngine = ParticleEngine || new ( function() {
 
     _self.movePredator = function(delta_t) {
         var delta = 50;
+
         // move in positive x direction on key 'j'
         if (Key_l)
             for (var i = 0; i < _self._emitters.length; ++i )
@@ -142,6 +143,7 @@ var ParticleEngine = ParticleEngine || new ( function() {
         if (Key_i)
             for (var i = 0; i < _self._emitters.length; ++i )
                 _self._emitters[i]._updater._opts.externalForces.predator.y += delta*delta_t;
+
         // move in negative y direction on key 'k'
         if (Key_k)
             for (var i = 0; i < _self._emitters.length; ++i )
@@ -172,7 +174,7 @@ var ParticleEngine = ParticleEngine || new ( function() {
 })();
 
 function Emitter ( opts ) {
-    // console.log ( "Emiiter", this );
+
     // initialize some base variables needed by emitter, that we will extract from options
     this._maxParticleCount     = undefined;
     this._particlesPerSecond   = undefined;

@@ -1,7 +1,3 @@
-/*
- * In this file you can specify all sort of updaters
- *  We provide an example of simple updater that updates pixel positions based on initial velocity and gravity
- */
 
 var speedingUp = 0;
 
@@ -34,10 +30,10 @@ Boundaries.boundingBox = function ( particleAttributes, alive, delta_t, bounding
                                        (min_y + max_y) / 2,
                                        (min_z + max_z) / 2);
 
-        // attractor code
+        // attractor box code
         if (new_pos.x < min_x || new_pos.x > max_x || new_pos.y < min_y ||
                 new_pos.y > max_y || new_pos.z < min_z || new_pos.z > max_z) {
-            vel.add(center.sub(new_pos).multiplyScalar(0.0025));
+            vel.add(center.sub(new_pos).multiplyScalar(0.001));
         }
 
         setElement( i, positions, pos );
@@ -84,15 +80,13 @@ var counter = 0;
 EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, delta_t ) {
     var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
-
     var predator = this._opts.externalForces.predator;
 
     // scale factors for each rule
-    var f_1 = 0.00025 * Gui.factors[0]; 	// center of mass
+    var f_1 = 0.0003 * Gui.factors[0]; 	// center of mass
     var f_2a = 15 * Gui.factors[1]; 		// collision avoidance: distance threshold
-    var f_2b = 0.001 * Gui.factors[1];		// collision avoidance: shift scale factor
-    var f_3 = 0.005 * Gui.factors[2];		// velocity matching
-    console.log(Gui.factors[0]);
+    var f_2b = 0.0015 * Gui.factors[1];		// collision avoidance: shift scale factor
+    var f_3 = 0.01 * Gui.factors[2];		// velocity matching
 
     var flock_size = 0;
     var pos_sum = new THREE.Vector3();
@@ -172,13 +166,10 @@ EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_
     var sizes    = particleAttributes.size;
 
     for ( var i = 0 ; i < alive.length ; ++i ) {
-
         if ( !alive[i] ) continue;
-        // ----------- STUDENT CODE BEGIN ------------
         var s = getElement( i, sizes );
 
         setElement( i, sizes, s );
-        // ----------- STUDENT CODE END ------------
     }
 
 };
@@ -216,7 +207,7 @@ EulerUpdater.prototype.boundaries = function ( particleAttributes, alive, delta_
     if ( !this._opts.collidables ) {
         return;
     }
-    // boundary box code
+
     if ( this._opts.collidables.boundingBoxes ) {
         for (var i = 0; i < this._opts.collidables.boundingBoxes.length ; ++i ) {
             Boundaries.boundingBox (particleAttributes, alive, delta_t, this._opts.collidables.boundingBoxes[i]);
