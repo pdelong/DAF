@@ -85,7 +85,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     	Gui.alertOnce("Press 'a' to add boids, 's' to speed up birds,<br>" +
     				  "and use i+k, j+l, and u+o to control the <br>" + 
     				  "x, y, and z of the predator. <br>" +
-                      "Press 'd' to add foods to the system.");
+                      "Press 'd' to add food balls to the system.");
     });
 
     // gc.textures.onChange( function( value ) {
