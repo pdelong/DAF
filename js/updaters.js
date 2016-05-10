@@ -83,7 +83,7 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
                Gui.values.systems == Gui.particleSystems[2]) {
         predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
         ParticleEngine.redraw(predator.p, predator.v, 0);        
-    } else {
+    } else if (Gui.values.systems == Gui.particleSystems[3]) {
         Scene.removeObject( old_objects[0] );
     }
 };
