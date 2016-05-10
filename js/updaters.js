@@ -79,9 +79,12 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
     if (Key_l || Key_j || Key_i || Key_k || Key_u || Key_o) {
         predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
         ParticleEngine.redraw(predator.p, predator.v, 0);
-    } else if (Gui.values.systems == Gui.particleSystems[1]) {
+    } else if (Gui.values.systems == Gui.particleSystems[1] || 
+               Gui.values.systems == Gui.particleSystems[2]) {
         predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
         ParticleEngine.redraw(predator.p, predator.v, 0);        
+    } else {
+        Scene.removeObject( old_objects[0] );
     }
 };
 
@@ -91,22 +94,16 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     var velocities = particleAttributes.velocity;
     var predator = this._opts.externalForces.predator;
     var foods = this._opts.externalForces.foods;
+    
+    var flock = flockInfo( particleAttributes, alive );
+    var pos_sum = flock.p.multiplyScalar(flock.size);
+    var vel_sum = flock.v.multiplyScalar(flock.size);
 
     // scale factors for each rule
     var f_1 = 0.0003 * Gui.factors[0]; 	// center of mass
     var f_2a = 15 * Gui.factors[1]; 		// collision avoidance: distance threshold
     var f_2b = 0.0015 * Gui.factors[1];		// collision avoidance: shift scale factor
     var f_3 = 0.01 * Gui.factors[2];		// velocity matching
-
-    var flock_size = 0;
-    var pos_sum = new THREE.Vector3();
-    var vel_sum = new THREE.Vector3();
-    for (var i = 0 ; i < alive.length ; ++i) {
-        if (!alive[i]) continue;
-        flock_size++;
-        pos_sum.add(getElement(i, positions));
-        vel_sum.add(getElement(i, velocities));
-    }
 
     // boids rules: http://www.kfish.org/boids/pseudocode.html
     for (var i = 0 ; i < alive.length ; ++i) {
@@ -116,7 +113,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 
         // rule 3: velocity matching
         // do first so v isn't yet altered by rules 1 and 2
-        var flock_vel = vel_sum.clone().sub(v).divideScalar(flock_size - 1);
+        var flock_vel = vel_sum.clone().sub(v).divideScalar(flock.size - 1);
         flock_vel.sub(v).multiplyScalar(f_3);
         v.add(flock_vel);
 
@@ -132,7 +129,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         v.add(shift);
 
         // rule 1: center of mass
-        var flock_pos = pos_sum.clone().sub(p).divideScalar(flock_size - 1);
+        var flock_pos = pos_sum.clone().sub(p).divideScalar(flock.size - 1);
         flock_pos.sub(p).multiplyScalar(f_1);
         v.add(flock_pos);
 
@@ -173,34 +170,22 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
     }
 };
 
-EulerUpdater.prototype.updatePredatorVelocity = function ( delta_t ) {
+EulerUpdater.prototype.updatePredatorVelocity = function ( particleAttributes, alive, delta_t ) {
     
     var pe = ParticleEngine;
     var predator = this._opts.externalForces.predator;
     var bb = this._opts.collidables.boundingBoxes[0];
 
     if (Gui.values.systems == Gui.particleSystems[0]) {            
-        
         var delta = 25;
         predator.v = new THREE.Vector3(0, 0, 0);
 
-        if (Key_l) // +x direction
-            predator.v.x += delta;
-        
-        if (Key_j) // -x direction
-            predator.v.x -= delta;
-
-        if (Key_i) // +y direction
-            predator.v.y += delta;
-
-        if (Key_k) // -y direction
-            predator.v.y -= delta;
-
-        if (Key_u) // +z direction
-            predator.v.z += delta;
-
-        if (Key_o) // -z direction
-            predator.v.z -= delta;
+        if (Key_l) predator.v.x += delta;
+        if (Key_j) predator.v.x -= delta;
+        if (Key_i) predator.v.y += delta;
+        if (Key_k) predator.v.y -= delta;
+        if (Key_u) predator.v.z += delta;
+        if (Key_o) predator.v.z -= delta;
 
     } else if (Gui.values.systems == Gui.particleSystems[1]) {
 
@@ -227,16 +212,32 @@ EulerUpdater.prototype.updatePredatorVelocity = function ( delta_t ) {
         predator.v.setLength(25);
 
     } else if (Gui.values.systems == Gui.particleSystems[2]) {
+        
+        if (predator.v.length() == 0) {
+            var z = 2 * Math.random() - 1;
+            var phi = 2*Math.PI*Math.random();
+            d = Math.sqrt(1 - z*z);
+            predator.v = new THREE.Vector3(d * Math.cos(phi),
+                                           d * Math.sin(phi),
+                                           z);
+            predator.v.setLength(25);
+            return;
+        }
 
-        // var z = 2 * Math.random() - 1;
-        // var phi = 2*Math.PI*Math.random();
-        // var d = Math.sqrt(1 - z*z);
+        var z = 2 * Math.random() - 1;
+        var phi = 2*Math.PI*Math.random();
+        d = Math.sqrt(1 - z*z);
+        var acc = new THREE.Vector3(d * Math.cos(phi),
+                                    d * Math.sin(phi),
+                                    z);
+        predator.v.add(acc.normalize());
 
-        // this._opts.externalForces.predator.v = new THREE.Vector3(d * Math.cos(phi),
-        //                          d * Math.sin(phi),
-        //                          z);
-        // predator.v.multiplyScalar(predator_v);
-        // // not yet implemented
+        // vaguely seek the flock center
+        var flock = flockInfo( particleAttributes, alive );
+        var f_dist = flock.p.clone().sub(predator.p).setLength(1);
+        predator.v.add(f_dist);
+
+        predator.v.setLength(25);
     }
 };
 
@@ -284,23 +285,15 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
 
 EulerUpdater.prototype.updateSizes = function ( particleAttributes, alive, delta_t ) {
     var sizes     = particleAttributes.size;
-    var positions = particleAttributes.position;
     var base_size = SystemSettings.flocking.initializerSettings.size;
-
-    var flock_size = 0;
-    var pos_sum = new THREE.Vector3();
-    for (var i = 0 ; i < alive.length ; ++i) {
-        if (!alive[i]) continue;
-        flock_size++;
-        pos_sum.add(getElement(i, positions));
-    }
-    var flock_pos = pos_sum.multiplyScalar(1 / flock_size);
+    var positions = particleAttributes.position;
+    var flock = flockInfo( particleAttributes, alive );
 
     for ( var i = 0 ; i < alive.length ; ++i ) {
         if ( !alive[i] ) continue;
-        var s = base_size
+        var s = base_size;
         var p = getElement(i, positions);
-        var dist = flock_pos.clone().sub(p).length(); 
+        var dist = flock.p.clone().sub(p).length(); 
         if (dist < 50) {
             s += 2 * s * ((50 - dist) / 50);
         }
@@ -319,25 +312,6 @@ EulerUpdater.prototype.speedup = function ( particleAttributes, alive, factor ) 
     }
 };
 
-// EulerUpdater.prototype.updateLifetimes = function ( particleAttributes, alive, delta_t) {
-//     var positions     = particleAttributes.position;
-//     var lifetimes     = particleAttributes.lifetime;
-
-//     for ( var i = 0 ; i < alive.length ; ++i ) {
-
-//         if ( !alive[i] ) continue;
-
-//         var lifetime = getElement( i, lifetimes );
-
-//         if ( lifetime < 0 ) {
-//             killParticle( i, particleAttributes, alive );
-//         } else {
-//             setElement( i, lifetimes, lifetime - delta_t );
-//         }
-//     }
-
-// };
-
 EulerUpdater.prototype.boundaries = function ( particleAttributes, alive, delta_t ) {
     if ( !this._opts.collidables ) {
         return;
@@ -354,7 +328,7 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
 
     // this.updateLifetimes( particleAttributes, alive, delta_t );
     this.updateVelocities( particleAttributes, alive, delta_t );
-    this.updatePredatorVelocity( delta_t );
+    this.updatePredatorVelocity( particleAttributes, alive, delta_t );
     this.updatePositions( particleAttributes, alive, delta_t );
 
     this.boundaries( particleAttributes, alive, delta_t );
@@ -370,4 +344,23 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
     particleAttributes.lifetime.needsUpdate = true;
     particleAttributes.size.needsUpdate = true;
 
-}
+};
+
+var flockInfo = function ( particleAttributes, alive ) {
+    var positions  = particleAttributes.position;
+    var velocities = particleAttributes.velocity;
+
+    var flock_size = 0;
+    var pos_sum = new THREE.Vector3();
+    var vel_sum = new THREE.Vector3();
+    for (var i = 0 ; i < alive.length ; ++i) {
+        if (!alive[i]) continue;
+        flock_size++;
+        pos_sum.add(getElement(i, positions));
+        vel_sum.add(getElement(i, velocities));
+    }
+
+    return { p: pos_sum.multiplyScalar(1 / flock_size), 
+             v: vel_sum.multiplyScalar(1 / flock_size),
+             size: flock_size };
+};

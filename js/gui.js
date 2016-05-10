@@ -7,7 +7,7 @@ Gui.sceneList = [];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.particleSystems = [ "User: Cube", "User: Sphere", "Auto" ];
+Gui.particleSystems = [ "User: Cube", "User: Sphere", "Auto", "None" ];
 
 Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
@@ -21,13 +21,13 @@ Gui.values = {
     windowSize:  Gui.windowSizes[0],
     reset:       function () {},
     stopTime:    function () {},
-    help:  		 function () {},
+    // help:  		 function () {},
     rule1:    	 Gui.factors[0],
     rule2:    	 Gui.factors[1],
     rule3:    	 Gui.factors[2],
     spawnAmount: Gui.spawnAmount[3],
     textures:    Gui.textures[0],
-    systems:     Gui.particleSystems[0],
+    systems:     Gui.particleSystems[1],
     depthTest:   true,
     transparent: true,
     sorting:     true,
@@ -61,7 +61,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Predator Control");
     gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
     gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
-    gc.help 	= gui.add( Gui.values, 'help').name("Help");
+    // gc.help 	= gui.add( Gui.values, 'help').name("Help");
     gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("Spawn Amount");
 
     var advanced = gui.addFolder("Flocking Parameters");
@@ -81,12 +81,13 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
 
     gc.stopTime.onChange( ParticleEngine.pause );
     gc.reset.onChange( ParticleEngine.restart );
-    gc.help.onChange( function() {
-    	Gui.alertOnce("Press 'a' to add boids, 's' to speed up birds,<br>" +
-    				  "and use i+k, j+l, and u+o to control the <br>" + 
-    				  "x, y, and z of the predator. <br>" +
-                      "Press 'd' to add food balls to the system.");
-    });
+    
+    // gc.help.onChange( function() {
+    // 	Gui.alertOnce("Press 'a' to add boids, 's' to speed up birds,<br>" +
+    // 				  "and use i+k, j+l, and u+o to control the <br>" + 
+    // 				  "x, y, and z of the predator. <br>" +
+    //                   "Press 'd' to add food balls to the system.");
+    // });
 
     // gc.textures.onChange( function( value ) {
     //     var emitters = ParticleEngine.getEmitters();
@@ -105,6 +106,8 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
             Gui.values.systems = Gui.particleSystems[1];
         } else if (value == "Auto") {
             Gui.values.systems = Gui.particleSystems[2];
+        } else if (value == "None") {
+            Gui.values.systems = Gui.particleSystems[3];
         }
     });
 
