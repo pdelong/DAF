@@ -7,7 +7,7 @@ Gui.sceneList = [];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.particleSystems = [ "User: Cube", "User: Sphere", "Auto", "None" ];
+Gui.particleSystems = [ "x,y,z", "sphere", "auto", "none" ];
 
 Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
@@ -21,13 +21,13 @@ Gui.values = {
     windowSize:  Gui.windowSizes[0],
     reset:       function () {},
     stopTime:    function () {},
-    // help:  		 function () {},
+    help:  		 function () {},
     rule1:    	 Gui.factors[0],
     rule2:    	 Gui.factors[1],
     rule3:    	 Gui.factors[2],
     spawnAmount: Gui.spawnAmount[3],
     textures:    Gui.textures[0],
-    systems:     Gui.particleSystems[1],
+    systems:     Gui.particleSystems[3],
     depthTest:   true,
     transparent: true,
     sorting:     true,
@@ -53,15 +53,15 @@ Gui.closeAlert = function () {
 
 Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeCallback ) {
     // create top level controls
-    var gui     = new dat.GUI( { width: 300 } );
+    var gui     = new dat.GUI( { width: 200 } );
     var size    = gui.add( Gui.values, 'windowSize', Gui.windowSizes ).name("Window Size");
 
     // gui controls are added to this object below
     var gc = {};
+    gc.help     = gui.add( Gui.values, 'help').name("Help");
     gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Predator Control");
     gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
     gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
-    // gc.help 	= gui.add( Gui.values, 'help').name("Help");
     gc.spawnAmount = gui.add(Gui.values, 'spawnAmount', Gui.spawnAmount).name("Spawn Amount");
 
     var advanced = gui.addFolder("Flocking Parameters");
@@ -69,44 +69,32 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.rule2 = advanced.add(Gui.values, 'rule2', 0.5, 2).name("Collision Avoidance");
     gc.rule3 = advanced.add(Gui.values, 'rule3', 0.2, 5).name("Velocity Matching");
 
-    // var disp = gui.addFolder( "DISPLAY OPTIONS");
-    // gc.blends    = disp.add( Gui.values, 'blendTypes', Gui.blendTypes ).name("Blending Types");
-    // gc.textures  = disp.add( Gui.values, 'textures', Gui.textures ).name("Textures");
-    // gc.depthTest = disp.add( Gui.values, 'depthTest' ).name("Depth Test");
-    // gc.transp    = disp.add( Gui.values, 'transparent' ).name("Transparent");
-    // gc.sort      = disp.add( Gui.values, 'sorting' ).name("Sorting");
-
     // REGISTER CALLBACKS FOR WHEN GUI CHANGES:
     size.onChange( Renderer.onWindowResize );
 
     gc.stopTime.onChange( ParticleEngine.pause );
     gc.reset.onChange( ParticleEngine.restart );
     
-    // gc.help.onChange( function() {
-    // 	Gui.alertOnce("Press 'a' to add boids, 's' to speed up birds,<br>" +
-    // 				  "and use i+k, j+l, and u+o to control the <br>" + 
-    // 				  "x, y, and z of the predator. <br>" +
-    //                   "Press 'd' to add food balls to the system.");
-    // });
-
-    // gc.textures.onChange( function( value ) {
-    //     var emitters = ParticleEngine.getEmitters();
-    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
-    //         emitters[i]._material.uniforms.texture.value = new THREE.ImageUtils.loadTexture( 'images/' + value + '.png' );
-    //         emitters[i]._material.needsUpdate  = true;
-    //     }
-    // } );
+    gc.help.onChange( function() {
+    	Gui.alertOnce("Press 'a' to spawn extra boids<br>" +
+                      "Press 's' to speed up boids<br>" +
+                      "Press 'd' to add food<br><br>" + 
+    				  "<em>Predator mode</em><br>" +
+                      "- x,y,z: use i+k, j+l, and u+o to move along x,y,z axes<br>" +
+                      "- sphere: use i+k, j+l to direct boid<br><br>" +
+                      "Adjust Flocking Parameters to scale rules");
+    });
 
     gc.systems.onChange( function(value) {
         // var settings = SystemSettings[value];
         // Main.particleSystemChangeCallback ( settings ); // kek
-        if (value == "User: Cube") { // prob horrible style but its k
+        if (value == "x,y,z") { // prob horrible style but its k
             Gui.values.systems = Gui.particleSystems[0];
-        } else if (value == "User: Sphere")  {
+        } else if (value == "sphere")  {
             Gui.values.systems = Gui.particleSystems[1];
-        } else if (value == "Auto") {
+        } else if (value == "auto") {
             Gui.values.systems = Gui.particleSystems[2];
-        } else if (value == "None") {
+        } else if (value == "none") {
             Gui.values.systems = Gui.particleSystems[3];
         }
     });
@@ -126,27 +114,5 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.rule3.onChange( function(value) {
     	Gui.factors[2] = value;
     });
-
-    // gc.depthTest.onChange( function( value ) {
-    //     var emitters = ParticleEngine.getEmitters();
-    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
-    //         emitters[i]._material.depthTest = value;
-    //     }
-    // });
-
-    // gc.transp.onChange( function( value ) {
-    //     var emitters = ParticleEngine.getEmitters();
-    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
-    //         emitters[i]._material.transparent = value;
-    //         emitters[i]._material.needsUpdate  = true ;
-    //     }
-    // });
-
-    // gc.sort.onChange( function( value ) {
-    //     var emitters = ParticleEngine.getEmitters();
-    //     for ( var i = 0 ; i < emitters.length ; i++ ) {
-    //         emitters[i]._sorting = value;
-    //     }
-    // });
 };
 

@@ -76,7 +76,7 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
         setElement( i, positions, p );
     }
 
-    if (Key_l || Key_j || Key_i || Key_k || Key_u || Key_o) {
+    if (Key_l || Key_j || Key_i || Key_k || Key_u || Key_o && Gui.values.systems == Gui.particleSystems[0]) {
         predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
         ParticleEngine.redraw(predator.p, predator.v, 0);
     } else if (Gui.values.systems == Gui.particleSystems[1] || 
@@ -266,14 +266,11 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
 
         var dist_to_predator = p.distanceTo(predator.p);
         var blue = 0; 
-        if (dist_to_predator < 50 && old_objects.length != 0) {
+        if (dist_to_predator < 50 && old_objects.length != 0 && Gui.values.systems != Gui.particleSystems[3]) {
             blue = (50 - dist_to_predator) / 10;
         }
         c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, 
                               Math.min(1, dot + blue), 1);
-
-        // if (p.distanceTo(predator.p) < 50 && old_objects.length != 0)
-            // c = new THREE.Vector4(0.0, 0.0, 1.0, 1.0);
 
         setElement( i, colors, c );
     }

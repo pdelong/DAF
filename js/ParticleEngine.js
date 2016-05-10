@@ -250,6 +250,7 @@ Emitter.prototype.restart = function() {
     for (var i = 0; i < foods.length; i++)
         Scene.removeObject(foods[i]);
     this._updater._opts.externalForces.foods = [];
+    // Gui.values.systems = Gui.particleSystems[3];
     this._initializer.initialize(this._particleAttributes, this.addSpawn(250) );
 
 };
@@ -393,7 +394,7 @@ Emitter.prototype.addFood = function () {
 
     var food_obj = new THREE.Mesh( geo, phong )
     food_obj.position.set (pos.x, pos.y, pos.z);
-    food_obj.magnitude = (r * 4.0) + 10;
+    food_obj.magnitude = (r * 2.0) + 5;
     food_obj.r = r;
     Scene.addObject( food_obj );
 
