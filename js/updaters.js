@@ -204,35 +204,27 @@ EulerUpdater.prototype.updatePredatorVelocity = function ( delta_t ) {
 
     } else if (Gui.values.systems == Gui.particleSystems[1]) {
 
-        var v_magnitude = 25;
+        // do something better here ?
         if (predator.v.length() == 0) {
             predator.v = new THREE.Vector3(25, 0, 0);
-        }
-
-        var base = Math.sqrt((predator.v.x * predator.v.x) + 
-                             (predator.v.z * predator.v.z));
-        var theta = Math.tan( (predator.v.x / predator.v.z) || Number.MAX_VALUE );
-        var phi = Math.tan( (predator.v.y / base) || Number.MAX_VALUE )
-        // console.log(Math.tan(Number.MAX_VALUE) + " " + Math.tan(0));
-        // 5AM and i don't feel like doing trig
-
-        // l and j rotate in the horizontal (x-z) plane, + is couterclockwise
-        if (Key_l) { // +theta
-
+            return;
         }
         
-        if (Key_j) {// -theta
-        
-        }
+        var delta = Math.PI / 20;
+        var y_axis = new THREE.Vector3(0, 1, 0);
+        normal = new THREE.Vector3(predator.v.z, 0, -predator.v.x).normalize();
 
-        // i and k incline the particle 
-        if (Key_i) {// -phi
-        
-        }
+        // i and k incline the particle, prevent fully vertical flight
+        var new_v = predator.v.clone();
+        if (Key_i) new_v.applyAxisAngle( normal, -delta / 2 );
+        if (Key_k) new_v.applyAxisAngle( normal,  delta / 2 );
+        if (new_v.y < 20 && new_v.y > -20) predator.v = new_v;
 
-        if (Key_k) {// +phi
-        
-        }
+        // l and j rotate in the horizontal (x-z) plane
+        if (Key_l) predator.v.applyAxisAngle( y_axis, -delta );
+        if (Key_j) predator.v.applyAxisAngle( y_axis,  delta );
+
+        predator.v.setLength(25);
 
     } else if (Gui.values.systems == Gui.particleSystems[2]) {
 

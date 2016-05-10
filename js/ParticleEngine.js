@@ -148,11 +148,6 @@ var ParticleEngine = ParticleEngine || new ( function() {
         bird.position.set(pos.x, pos.y, pos.z);
         old_objects[i] = bird;
 
-        var new_vel = new THREE.Vector3(Math.random(), Math.random(), Math.random());
-        // move in positive x direction on key 'j'
-        var delta = 10;
-        new_vel.add(vel.clone().multiplyScalar(delta));
-        
         bird.rotation.y = Math.atan2( - vel.z, vel.x );
         bird.rotation.z = Math.asin( vel.y / vel.length() );
         bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
