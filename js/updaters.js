@@ -130,7 +130,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         // predator avoidance
         var dist_to_predator = p.distanceTo(predator);
         var acc = p.clone().sub(predator).divideScalar(dist_to_predator,1);
-        acc.multiplyScalar(10);
+        acc.multiplyScalar(20);
         if (dist_to_predator < 50 && old_objects.length != 0)
             v.add(acc.multiplyScalar(delta_t));
 
@@ -166,7 +166,9 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 
 EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delta_t ) {
     var colors     = particleAttributes.color;
+    var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
+    var predator = this._opts.externalForces.predator;
 
     var flock_size = 0;
     var vel_sum = new THREE.Vector3();
@@ -180,9 +182,13 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
     for ( var i = 0 ; i < alive.length ; ++i ) {
 
         if ( !alive[i] ) continue;
+        var p = getElement(i, positions).clone();
         var v = getElement( i, velocities ).clone().normalize();
         var dot = 0.5 - 0.5 * v.dot(flock_vel);
         c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, dot, 1);
+
+        if (p.distanceTo(predator) < 50 && old_objects.length != 0)
+            c = new THREE.Vector4(0.0, 0.0, 1.0, 1.0);
 
         setElement( i, colors, c );
     }
