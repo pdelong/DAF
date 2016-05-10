@@ -140,7 +140,7 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         var dist_to_predator = p.distanceTo(predator.p);
         var acc = p.clone().sub(predator.p).divideScalar(dist_to_predator);
         acc.multiplyScalar(20);
-        if (dist_to_predator < 50 && old_objects.length != 0)
+        if (dist_to_predator < 50 && old_objects.length != 0) {
             v.add(acc.multiplyScalar(delta_t));
         }
 
