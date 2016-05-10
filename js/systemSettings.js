@@ -95,7 +95,7 @@ SystemSettings.flocking = {
         Scene.addObject( plane3 );
 
         // clouds
-        var sprite = THREE.ImageUtils.loadTexture( "images/test.png" );
+        var sprite = THREE.ImageUtils.loadTexture( "images/cloud.png" );
         material = new THREE.PointCloudMaterial( { size: 250.0,
             map: sprite,
             blending: THREE.NormalBlending, //THREE.AdditiveBlending,
@@ -103,7 +103,6 @@ SystemSettings.flocking = {
             transparent: true} );
 
         var geometry = new THREE.Geometry();
-
         geometry.vertices.push(
             new THREE.Vector3( -50,  110, -500 ), new THREE.Vector3( 25,  100, -500 ), new THREE.Vector3( -125,  100, -500 ),
             new THREE.Vector3( -50,  160, -500 ), new THREE.Vector3( 25,  150, -500 ), new THREE.Vector3( -125,  150, -500 ),
@@ -118,8 +117,8 @@ SystemSettings.flocking = {
             new THREE.Vector3(  0, 200, -50 ), new THREE.Vector3( 0, 210, 0 ), new THREE.Vector3( 0, 200, 50 ), new THREE.Vector3( -50 , 200, 0 )
         );
 
-        var particleCloud  = new THREE.PointCloud( geometry, material );
-        Scene.addObject(particleCloud);
+        var clouds  = new THREE.PointCloud( geometry, material );
+        Scene.addObject(clouds);
     },
 };
 

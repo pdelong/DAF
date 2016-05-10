@@ -6,7 +6,7 @@ var ParticleEngine = ParticleEngine || {
 
 ParticleEngine.create = function () {
     this._particles = new THREE.BufferGeometry();// initFunction( count, this._pool );
-    var sprite = THREE.ImageUtils.loadTexture( "images/spark.png" );
+    var sprite = THREE.ImageUtils.loadTexture( "images/sphere.png" );
     this._material = new THREE.PointCloudMaterial( { size: 15.0,
         map: sprite,
         // alphaTest : 0.5,

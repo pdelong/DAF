@@ -104,40 +104,9 @@ Scene.addAxis = function() {
     this._axis = [x_axis, y_axis, z_axis];
 };
 
-Scene.addGrid = function() {
-    var w = new THREE.LineBasicMaterial( {color: new THREE.Color( 0.95, 0.95, 0.95 ), linewidth: 5, opacity: 0.3, transparent: true });
-
-    var grid_geo = new THREE.Geometry();
-    for ( var i = -10; i <= 10 ; ++i ) {
-        if ( i === 0 ) continue;
-        grid_geo.vertices.push( new THREE.Vector3( i,  0, -10 ) );
-        grid_geo.vertices.push( new THREE.Vector3( i,  0,  10 ) );
-        grid_geo.vertices.push( new THREE.Vector3( -10, 0, i ) );
-        grid_geo.vertices.push( new THREE.Vector3( 10,  0,  i ) );
-    }
-    var grid = new THREE.Line( grid_geo, w, THREE.LinePieces );
-    this._scene.add( grid );
-
-
-    this._grid = grid;
-};
-
-Scene.showGrid = function () {
-    this._grid.visible = true;
-};
-
-Scene.hideGrid = function () {
-    this._grid.visible = false;
-};
-
 Scene.showAxis = function () {
     this._axis[0].visible = true;
     this._axis[1].visible = true;
     this._axis[2].visible = true;
 };
 
-Scene.hideAxis = function (){
-    this._axis[0].visible = false;
-    this._axis[1].visible = false;
-    this._axis[2].visible = false;
-};
