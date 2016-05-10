@@ -58,7 +58,7 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
 
     // gui controls are added to this object below
     var gc = {};
-    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Flocking System");
+    gc.systems 	= gui.add( Gui.values, 'systems', Gui.particleSystems ).name("Predator Control");
     gc.stopTime	= gui.add( Gui.values, 'stopTime' ).name("Pause");
     gc.reset 	= gui.add( Gui.values, 'reset' ).name("Reset");
     gc.help 	= gui.add( Gui.values, 'help').name("Help");

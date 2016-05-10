@@ -270,8 +270,8 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
         c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, 
                               Math.min(1, dot + blue), 1);
 
-        if (p.distanceTo(predator.p) < 50 && old_objects.length != 0)
-            c = new THREE.Vector4(0.0, 0.0, 1.0, 1.0);
+        // if (p.distanceTo(predator.p) < 50 && old_objects.length != 0)
+            // c = new THREE.Vector4(0.0, 0.0, 1.0, 1.0);
 
         setElement( i, colors, c );
     }
