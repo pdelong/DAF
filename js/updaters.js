@@ -88,7 +88,6 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
     }
 };
 
-var counter = 0;
 EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, delta_t ) {
     var positions = particleAttributes.position;
     var velocities = particleAttributes.velocity;
