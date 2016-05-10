@@ -58,7 +58,7 @@ SystemSettings.flocking = {
 
     // Scene
     maxParticles :  5000,
-    particlesFreq : 1000,
+    particlesFreq : 10000,
     createScene : function () {
         drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w, -boundary_w,  boundary_w));
         drawLine(new THREE.Vector3(-boundary_w, -boundary_w, -boundary_w), new THREE.Vector3(-boundary_w,  boundary_w, -boundary_w));
@@ -81,7 +81,7 @@ SystemSettings.flocking = {
         var plane1 = new THREE.Mesh( plane_geo, phong );
         plane1.position.set(0, 0, -100);
         Scene.addObject( plane1 );
-        // plane.rotation.x = -1.57;
+
         var plane2 = new THREE.Mesh( plane_geo, phong );
         plane2.position.set(0, -100, 0);
         plane2.rotation.x = 1.57;

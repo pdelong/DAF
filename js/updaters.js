@@ -76,7 +76,7 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
         setElement( i, positions, p );
     }
 
-    if (Key_l || Key_j || Key_i || Key_k || Key_u || Key_o && Gui.values.systems == Gui.particleSystems[0]) {
+    if ((Key_l || Key_j || Key_i || Key_k || Key_u || Key_o) && Gui.values.systems == Gui.particleSystems[0]) {
         predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
         ParticleEngine.redraw(predator.p, predator.v, 0);
     } else if (Gui.values.systems == Gui.particleSystems[1] || 

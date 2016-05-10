@@ -141,26 +141,26 @@ var ParticleEngine = ParticleEngine || new ( function() {
     }
 
     _self.redraw  = function(pos, vel, i) {
+        if (!_self._isRunning) return;
+        
         var old_phase =  Math.floor( Math.random() * 62.83 );
         if (old_objects[i] !== undefined) {
             old_phase = old_objects[i].phase;
             Scene.removeObject( old_objects[i] );
         }   
-
         var bird = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: 0x996515, side: THREE.DoubleSide } ) );
         bird.position.set(pos.x, pos.y, pos.z);
-        old_objects[i] = bird;
-
         bird.rotation.y = Math.atan2( - vel.z, vel.x );
         bird.rotation.z = Math.asin( vel.y / vel.length() );
         bird.phase = ( old_phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
         bird.geometry.vertices[ 5 ].y = bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 10;
         Scene.addObject( bird );
+        old_objects[i] = bird;
     }
 
     return _self;
 })();
-var counter = 0;
+
 function Emitter ( opts ) {
 
     // initialize some base variables needed by emitter, that we will extract from options
