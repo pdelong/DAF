@@ -52,6 +52,7 @@ FlockingInitializer.prototype.initializeVelocities = function ( velocities, posi
                                  d * Math.sin(phi),
                                  z);
     fvel.multiplyScalar(20);
+
     for ( var i = 0 ; i < toSpawn.length ; ++i ) {
         var idx = toSpawn[i];
 
@@ -65,7 +66,6 @@ FlockingInitializer.prototype.initializeVelocities = function ( velocities, posi
                                     z);
 
         vel.add(fvel);
-        vel.multiplyScalar(1.0);
 
         setElement( idx, velocities, vel );
     }

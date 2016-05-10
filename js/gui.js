@@ -7,14 +7,13 @@ Gui.sceneList = [];
 
 Gui.windowSizes = [ "full","400x400","600x400","600x600","800x600","800x800" ];
 
-Gui.particleSystems = [ "User", "Auto" ];
+Gui.particleSystems = [ "User: Cube", "User: Sphere", "Auto" ];
 
 Gui.spawnAmount = [ 1, 5, 10, 25, 100 ];
 
 Gui.textures = [ "blank", "base", "fire", "smoke", "spark", "sphere", "smoke" ];
 
 Gui.factors = [ 1, 1, 1 ];
-
 
 // due to a bug in dat GUI we need to initialize floats to non-interger values (like 0.5)
 // (the variable Gui.defaults below then carries their default values, which we set later)
@@ -100,16 +99,18 @@ Gui.init = function ( meshChangeCallback, controlsChangeCallback, displayChangeC
     gc.systems.onChange( function(value) {
         // var settings = SystemSettings[value];
         // Main.particleSystemChangeCallback ( settings ); // kek
-        if (value == 'User') { // prob horrible style but its k
+        if (value == "User: Cube") { // prob horrible style but its k
             Gui.values.systems = Gui.particleSystems[0];
-        } else if (value == 'Auto') {
+        } else if (value == "User: Sphere")  {
             Gui.values.systems = Gui.particleSystems[1];
+        } else if (value == "Auto") {
+            Gui.values.systems = Gui.particleSystems[2];
         }
-    } );
+    });
 
     gc.spawnAmount.onChange( function(value) {
         ParticleEngine.setSpawnAmount(value);
-    } );
+    });
 
     gc.rule1.onChange( function(value) {
     	Gui.factors[0] = value;

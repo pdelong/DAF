@@ -136,48 +136,27 @@ var ParticleEngine = ParticleEngine || new ( function() {
         }
     }
 
-    _self.movePredator = function(delta_t) {
-        var delta = 50;
-
-        // move in positive x direction on key 'j'
-        if (Key_l)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.x += delta*delta_t;
-
-        // move in negative x direction on key 'l'
-        if (Key_j)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.x -= delta*delta_t;
-
-        // move in positive y direction on key 'i'
-        if (Key_i)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.y += delta*delta_t;
-
-        // move in negative y direction on key 'k'
-        if (Key_k)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.y -= delta*delta_t;
-
-        // move in positive y direction on key 'u'
-        if (Key_u)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.z += delta*delta_t;
-
-        // move in negative y direction on key 'o'
-        if (Key_o)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.p.z -= delta*delta_t;
-
-        // redraw predator
-        if (Key_i || Key_j || Key_k || Key_l || Key_u || Key_o)
-            for (var i = 0; i < _self._emitters.length; ++i )
-                redraw(_self._emitters[i]._updater._opts.externalForces.predator.p, i);
-
-    }
-
     _self.setSpawnAmount = function(amt) {
         _self.spawnAmount = amt;
+    }
+
+    _self.redraw  = function(pos, vel, i) {
+        if (old_objects[i] !== undefined)
+            Scene.removeObject( old_objects[i] );
+
+        var bird = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: 0x996515, side: THREE.DoubleSide } ) );
+        bird.position.set(pos.x, pos.y, pos.z);
+        old_objects[i] = bird;
+
+        var new_vel = new THREE.Vector3(Math.random(), Math.random(), Math.random());
+        // move in positive x direction on key 'j'
+        var delta = 10;
+        new_vel.add(vel.clone().multiplyScalar(delta));
+        
+        bird.rotation.y = Math.atan2( - vel.z, vel.x );
+        bird.rotation.z = Math.asin( vel.y / vel.length() );
+        bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
+        Scene.addObject( bird );
     }
 
     return _self;
@@ -436,27 +415,3 @@ Emitter.prototype.addFood = function () {
 
     this._updater._opts.externalForces.foods.push(food_obj);
 };
-
-function redraw(pos, i) {
-    if (old_objects[i] !== undefined)
-        Scene.removeObject( old_objects[i] );
-
-    var bird = new THREE.Mesh( new Bird(), new THREE.MeshBasicMaterial( { color: 0x996515, side: THREE.DoubleSide } ) );
-    bird.position.set(pos.x, pos.y, pos.z);
-    old_objects[i] = bird;
-    
-    var vel = new THREE.Vector3(Math.random(), Math.random(), Math.random());
-    // move in positive x direction on key 'j'
-    var delta = 10;
-    if (Key_l) vel.x += delta;
-    if (Key_j) vel.x -= delta;
-    if (Key_i) vel.y += delta;
-    if (Key_k) vel.y -= delta;
-    if (Key_u) vel.z += delta;
-    if (Key_o) vel.z -= delta;
-    
-    bird.rotation.y = Math.atan2( - vel.z, vel.x );
-    bird.rotation.z = Math.asin( vel.y / vel.length() );
-    bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
-    Scene.addObject( bird );
-}

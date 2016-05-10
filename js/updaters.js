@@ -66,6 +66,7 @@ function EulerUpdater ( opts ) {
 EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, delta_t ) {
     var positions  = particleAttributes.position;
     var velocities = particleAttributes.velocity;
+    var predator = this._opts.externalForces.predator;
 
     for ( var i  = 0 ; i < alive.length ; ++i ) {
         if ( !alive[i] ) continue;
@@ -75,6 +76,13 @@ EulerUpdater.prototype.updatePositions = function ( particleAttributes, alive, d
         setElement( i, positions, p );
     }
 
+    if (Key_l || Key_j || Key_i || Key_k || Key_u || Key_o) {
+        predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
+        ParticleEngine.redraw(predator.p, predator.v, 0);
+    } else if (Gui.values.systems == Gui.particleSystems[1]) {
+        predator.p.add(predator.v.clone().multiplyScalar( delta_t ));
+        ParticleEngine.redraw(predator.p, predator.v, 0);        
+    }
 };
 
 var counter = 0;
@@ -132,9 +140,11 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
         var dist_to_predator = p.distanceTo(predator.p);
         var acc = p.clone().sub(predator.p).divideScalar(Math.pow(dist_to_predator,1));
         acc.multiplyScalar(10);
-        if (dist_to_predator < 50 && old_objects.length != 0)
+        if (dist_to_predator < 50 && old_objects.length != 0) {
             v.add(acc.multiplyScalar(delta_t));
+        }
 
+        // speed 'clamping'
         if (v.length() > 100)
             v.sub(v.clone().multiplyScalar(.1*delta_t));
         if (v.length() < 20)
@@ -161,26 +171,88 @@ EulerUpdater.prototype.updateVelocities = function ( particleAttributes, alive, 
 
         setElement(i, velocities, v);
     }
+};
 
-    // predator movement
-    // var predator_v = 50.0;
-    // var current_v  = predator.v;
-    // if (Gui.values.systems == Gui.particleSystems[1]) {
-    //     var z = 2 * Math.random() - 1;
-    //     var phi = 2*Math.PI*Math.random();
-    //     var d = Math.sqrt(1 - z*z);
+EulerUpdater.prototype.updatePredatorVelocity = function ( delta_t ) {
+    
+    var pe = ParticleEngine;
+    var predator = this._opts.externalForces.predator;
+    var bb = this._opts.collidables.boundingBoxes[0];
 
-    //     this._opts.externalForces.predator.v = new THREE.Vector3(d * Math.cos(phi),
-    //                              d * Math.sin(phi),
-    //                              z);
-    //     predator.v.multiplyScalar(predator_v);
-    // }
+    if (Gui.values.systems == Gui.particleSystems[0]) {            
+        
+        var delta = 25;
+        predator.v = new THREE.Vector3(0, 0, 0);
 
+        if (Key_l) // +x direction
+            predator.v.x += delta;
+        
+        if (Key_j) // -x direction
+            predator.v.x -= delta;
+
+        if (Key_i) // +y direction
+            predator.v.y += delta;
+
+        if (Key_k) // -y direction
+            predator.v.y -= delta;
+
+        if (Key_u) // +z direction
+            predator.v.z += delta;
+
+        if (Key_o) // -z direction
+            predator.v.z -= delta;
+
+    } else if (Gui.values.systems == Gui.particleSystems[1]) {
+
+        var v_magnitude = 25;
+        if (predator.v.length() == 0) {
+            predator.v = new THREE.Vector3(25, 0, 0);
+        }
+
+        var base = Math.sqrt((predator.v.x * predator.v.x) + 
+                             (predator.v.z * predator.v.z));
+        var theta = Math.tan( (predator.v.x / predator.v.z) || Number.MAX_VALUE );
+        var phi = Math.tan( (predator.v.y / base) || Number.MAX_VALUE )
+        // console.log(Math.tan(Number.MAX_VALUE) + " " + Math.tan(0));
+        // 5AM and i don't feel like doing trig
+
+        // l and j rotate in the horizontal (x-z) plane, + is couterclockwise
+        if (Key_l) { // +theta
+
+        }
+        
+        if (Key_j) {// -theta
+        
+        }
+
+        // i and k incline the particle 
+        if (Key_i) {// -phi
+        
+        }
+
+        if (Key_k) {// +phi
+        
+        }
+
+    } else if (Gui.values.systems == Gui.particleSystems[2]) {
+
+        // var z = 2 * Math.random() - 1;
+        // var phi = 2*Math.PI*Math.random();
+        // var d = Math.sqrt(1 - z*z);
+
+        // this._opts.externalForces.predator.v = new THREE.Vector3(d * Math.cos(phi),
+        //                          d * Math.sin(phi),
+        //                          z);
+        // predator.v.multiplyScalar(predator_v);
+        // // not yet implemented
+    }
 };
 
 EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delta_t ) {
     var colors     = particleAttributes.color;
     var velocities = particleAttributes.velocity;
+    var positions  = particleAttributes.position;
+    var predator = this._opts.externalForces.predator;
 
     var flock_size = 0;
     var vel_sum = new THREE.Vector3();
@@ -192,11 +264,18 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
     var flock_vel = vel_sum.multiplyScalar(1 / flock_size).normalize();
 
     for ( var i = 0 ; i < alive.length ; ++i ) {
-
         if ( !alive[i] ) continue;
         var v = getElement( i, velocities ).clone().normalize();
+        var p = getElement( i, positions );
         var dot = 0.5 - 0.5 * v.dot(flock_vel);
-        c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, dot, 1);
+
+        var dist_to_predator = p.distanceTo(predator.p);
+        var blue = 0; 
+        if (dist_to_predator < 50 && old_objects.length != 0) {
+            blue = (50 - dist_to_predator) / 10;
+        }
+        c = new THREE.Vector4(Math.min(1, dot + speedingUp), dot, 
+                              Math.min(1, dot + blue), 1);
 
         setElement( i, colors, c );
     }
@@ -207,7 +286,7 @@ EulerUpdater.prototype.updateColors = function ( particleAttributes, alive, delt
         speedingUp = 0;
 };
 
-EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_t ) {
+EulerUpdater.prototype.updateSizes = function ( particleAttributes, alive, delta_t ) {
     var sizes     = particleAttributes.size;
     var positions = particleAttributes.position;
     var base_size = SystemSettings.flocking.initializerSettings.size;
@@ -232,7 +311,6 @@ EulerUpdater.prototype.updateSizes= function ( particleAttributes, alive, delta_
 
         setElement( i, sizes, s );
     }
-
 };
 
 EulerUpdater.prototype.speedup = function ( particleAttributes, alive, factor ) {
@@ -280,6 +358,7 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
 
     // this.updateLifetimes( particleAttributes, alive, delta_t );
     this.updateVelocities( particleAttributes, alive, delta_t );
+    this.updatePredatorVelocity( delta_t );
     this.updatePositions( particleAttributes, alive, delta_t );
 
     this.boundaries( particleAttributes, alive, delta_t );
@@ -287,10 +366,7 @@ EulerUpdater.prototype.update = function ( particleAttributes, alive, delta_t ) 
     this.updateColors( particleAttributes, alive, delta_t );
     this.updateSizes( particleAttributes, alive, delta_t );
 
-    if (Gui.values.systems == Gui.particleSystems[0]) {
-        ParticleEngine.movePredator(delta_t);
-    }
-
+    
     // tell webGL these were updated
     particleAttributes.position.needsUpdate = true;
     particleAttributes.color.needsUpdate = true;

@@ -128,7 +128,7 @@ var Key_u = false;
 var Key_o = false;
 
 window.addEventListener( 'keyup', function( event ) {
-    // If a predator rey is released then stop moving in that direction
+    // If a predator key is released then stop moving in that direction
     if (event.which == 73)
         Key_i = false;
     if (event.which == 75)
@@ -167,5 +167,6 @@ window.addEventListener( 'keydown', function( event ) {
         Key_u = true;
     if (event.which == 79)
         Key_o = true;   
+
 });
 
