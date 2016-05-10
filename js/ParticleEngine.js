@@ -142,37 +142,37 @@ var ParticleEngine = ParticleEngine || new ( function() {
         // move in positive x direction on key 'j'
         if (Key_l)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.x += delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.x += delta*delta_t;
 
         // move in negative x direction on key 'l'
         if (Key_j)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.x -= delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.x -= delta*delta_t;
 
         // move in positive y direction on key 'i'
         if (Key_i)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.y += delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.y += delta*delta_t;
 
         // move in negative y direction on key 'k'
         if (Key_k)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.y -= delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.y -= delta*delta_t;
 
         // move in positive y direction on key 'u'
         if (Key_u)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.z += delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.z += delta*delta_t;
 
         // move in negative y direction on key 'o'
         if (Key_o)
             for (var i = 0; i < _self._emitters.length; ++i )
-                _self._emitters[i]._updater._opts.externalForces.predator.z -= delta*delta_t;
+                _self._emitters[i]._updater._opts.externalForces.predator.p.z -= delta*delta_t;
 
         // redraw predator
         if (Key_i || Key_j || Key_k || Key_l || Key_u || Key_o)
             for (var i = 0; i < _self._emitters.length; ++i )
-                redraw(_self._emitters[i]._updater._opts.externalForces.predator, i);
+                redraw(_self._emitters[i]._updater._opts.externalForces.predator.p, i);
 
     }
 
