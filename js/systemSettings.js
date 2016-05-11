@@ -108,13 +108,13 @@ SystemSettings.flocking = {
             new THREE.Vector3( -50,  160, -500 ), new THREE.Vector3( 25,  150, -500 ), new THREE.Vector3( -125,  150, -500 ),
             new THREE.Vector3(  -370, 0, -500 ), new THREE.Vector3(  -370, 0, -410 ), new THREE.Vector3( -300, 0, -410 ),
             new THREE.Vector3( -300,  120, -50 ), new THREE.Vector3( -300,  130, 25 ), new THREE.Vector3( -300, 130, -125 ),
-            new THREE.Vector3(  240, 20, 0 ), new THREE.Vector3( 240, 20, 40 ),
+            new THREE.Vector3(  240, 20, 150 ), new THREE.Vector3( 240, 20, 190 ),
             new THREE.Vector3(  0, 25, 300 ), new THREE.Vector3( 40, 10, 300 ), new THREE.Vector3( 80, -5, 300 ), new THREE.Vector3( -40, 25, 300 ), new THREE.Vector3( 30, 25, 280 ),
             new THREE.Vector3(  125, 100, -100 ), new THREE.Vector3( 125, 100, -140 ),
             new THREE.Vector3(  -150, -80, 70 ), new THREE.Vector3( -150, -80, 110 ),
-            new THREE.Vector3(  170, -50, 170 ), new THREE.Vector3( 170, -50, 210 ), new THREE.Vector3( 150, -50, 210 ),
-            new THREE.Vector3(  0, -200, -50 ), new THREE.Vector3( 0, -210, 0 ), new THREE.Vector3( 0, -200, 50 ), new THREE.Vector3( -50 , -200, 0 ),
-            new THREE.Vector3(  0, 200, -50 ), new THREE.Vector3( 0, 210, 0 ), new THREE.Vector3( 0, 200, 50 ), new THREE.Vector3( -50 , 200, 0 )
+            // new THREE.Vector3(  170, -50, 170 ), new THREE.Vector3( 170, -50, 210 ), new THREE.Vector3( 150, -50, 210 ),
+            new THREE.Vector3(  100, -200, -50 ), new THREE.Vector3( 100, -210, 0 ), new THREE.Vector3( 100, -200, 50 ), new THREE.Vector3( 50 , -200, 0 )
+            // new THREE.Vector3(  0, 200, -50 ), new THREE.Vector3( 0, 210, 0 ), new THREE.Vector3( 0, 200, 50 ), new THREE.Vector3( -50 , 200, 0 )
         );
 
         var clouds  = new THREE.PointCloud( geometry, material );
